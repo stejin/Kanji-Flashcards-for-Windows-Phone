@@ -1,0 +1,89 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="KanjiFlashcards.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True" xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit">
+       
+    <phone:PhoneApplicationPage.Resources>
+   
+    </phone:PhoneApplicationPage.Resources>
+
+        <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="173" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock x:Name="ApplicationTitle" Text="Kanji Flashcards" Style="{StaticResource PhoneTextNormalStyle}"/>
+           <!-- <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/> -->
+        </StackPanel>
+        
+        <Grid x:Name="TodayKanji" Grid.Row="1" ShowGridLines="True" Background="#FF464646" Margin="0,10,0,0" ManipulationStarted="TodayKanji_ManipulationStarted">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="173" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="173" />
+                <ColumnDefinition Width="307" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Name="TodayKanjiText" Text="漢" Grid.Column="0" Grid.Row="0" FontSize="80" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-10,0,0" />
+            <TextBlock Name="TodayKanjiDetails" Text="Today's Kanji" Grid.Column="1" Grid.Row="0" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Tag="Today's Kanji" />
+        </Grid>
+        
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="2" Margin="12,22,12,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="80" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="69*" />
+                <ColumnDefinition Width="387*" />
+            </Grid.ColumnDefinitions>
+            <Image x:Name="SettingsIcon" Source="/Images/appbar.feature.settings.dark.png" Grid.Column="0" Grid.Row="3" ManipulationStarted="Settings_ManipulationStarted" VerticalAlignment="Center"/>
+            <TextBlock Name="Settings" Text="Settings" Grid.Column="1" Grid.Row="3" FontSize="46" ManipulationStarted="Settings_ManipulationStarted" VerticalAlignment="Center"/>
+            <Image x:Name="PlayIcon" Source="/Images/appbar.transport.play.dark.png" Grid.Column="0" Grid.Row="0" ManipulationStarted="Kanji_ManipulationStarted"  VerticalAlignment="Center"/>
+            <TextBlock Name="Flashcards" Text="Flashcards" FontSize="46" Grid.Column="1" Grid.Row="0" ManipulationStarted="Kanji_ManipulationStarted" VerticalAlignment="Center"/>
+            <Image x:Name="ReviewIcon" Source="/Images/appbar.favs.dark.png" Grid.Column="0" Grid.Row="1" ManipulationStarted="ReviewList_ManipulationStarted"  VerticalAlignment="Center"/>
+            <TextBlock Name="Review" Text="Review" FontSize="46" Grid.Column="1" Grid.Row="1" ManipulationStarted="ReviewList_ManipulationStarted" VerticalAlignment="Center"/>
+            <Image x:Name="AboutIcon" Source="/Images/appbar.questionmark.dark.png" Grid.Column="0" Grid.Row="4"  ManipulationStarted="About_ManipulationStarted" VerticalAlignment="Center"/>
+            <TextBlock Name="About" Text="About" Grid.Column="1" Grid.Row="4" FontSize="46" ManipulationStarted="About_ManipulationStarted" VerticalAlignment="Center"/>
+            <Image x:Name="LookupIcon" Source="/Images/appbar.feature.search.dark.png" Grid.Column="0" Grid.Row="2"  ManipulationStarted="Lookup_ManipulationStarted" VerticalAlignment="Center"/>
+            <TextBlock Name="Lookup" Text="Lookup" Grid.Column="1" Grid.Row="2" FontSize="46" ManipulationStarted="Lookup_ManipulationStarted" VerticalAlignment="Center"/>
+            <Image x:Name="EmailIcon" Source="/Images/appbar.feature.email.dark.png" Grid.Column="0" Grid.Row="5"  ManipulationStarted="FeatureRequest_ManipulationStarted" VerticalAlignment="Center"/>
+            <TextBlock Name="Feature" Text="Feature request" Grid.Column="1" Grid.Row="5" FontSize="46" ManipulationStarted="FeatureRequest_ManipulationStarted" VerticalAlignment="Center"/>
+        </Grid>
+        <toolkit:PerformanceProgressBar HorizontalAlignment="Left" Width="468" Margin="12,50,0,0" Name="progressBar" VerticalAlignment="Top" Height="22" IsIndeterminate="True" />
+    </Grid>
+ 
+    <!--Sample code showing usage of ApplicationBar-->
+    <!--phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.save.rest.png" Text="Save"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" Text="Cancel"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar> -->
+   
+
+</phone:PhoneApplicationPage>

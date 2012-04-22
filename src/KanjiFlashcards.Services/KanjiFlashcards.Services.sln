@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanjiFlashcards.DataLayer", "..\KanjiFlashcards.DataLayer\KanjiFlashcards.DataLayer\KanjiFlashcards.DataLayer.csproj", "{CE26DEE5-B9EB-4143-B5A7-298EAE57CC5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanjiFlashcards.Services", "KanjiFlashcards.Services\KanjiFlashcards.Services.csproj", "{A234305D-8336-41F2-A5B9-DB4881DFCC65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KanjiFlashcards.ServiceContracts", "KanjiFlashcards.ServiceContracts\KanjiFlashcards.ServiceContracts.csproj", "{C7526EF5-4EEC-4263-98A3-E6E4E2C49CF7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE26DEE5-B9EB-4143-B5A7-298EAE57CC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE26DEE5-B9EB-4143-B5A7-298EAE57CC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE26DEE5-B9EB-4143-B5A7-298EAE57CC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE26DEE5-B9EB-4143-B5A7-298EAE57CC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A234305D-8336-41F2-A5B9-DB4881DFCC65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A234305D-8336-41F2-A5B9-DB4881DFCC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A234305D-8336-41F2-A5B9-DB4881DFCC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A234305D-8336-41F2-A5B9-DB4881DFCC65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7526EF5-4EEC-4263-98A3-E6E4E2C49CF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7526EF5-4EEC-4263-98A3-E6E4E2C49CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7526EF5-4EEC-4263-98A3-E6E4E2C49CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7526EF5-4EEC-4263-98A3-E6E4E2C49CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
