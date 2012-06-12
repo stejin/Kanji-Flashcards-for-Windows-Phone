@@ -71,7 +71,7 @@ namespace KanjiFlashcards
 
         private void ShowKanji()
         {
-            Details.Text = "";
+            DetailsBlock.Text = "";
             kanji = App.KanjiDict.GetKanji(currentKanji);
             App.CurrentKanji = kanji.Literal;
             Kanji.Text = kanji.Literal;
@@ -88,7 +88,7 @@ namespace KanjiFlashcards
         
         private void ShowDetails()
         {
-            if (Details.Text != string.Empty)
+            if (DetailsBlock.Text != string.Empty)
                 return;
 
              System.Text.StringBuilder text = new System.Text.StringBuilder();
@@ -113,7 +113,7 @@ namespace KanjiFlashcards
                          break;
                  }
              }
-             Details.Text = text.ToString();           
+             DetailsBlock.Text = text.ToString();           
         }
 
         private void MoveForward()

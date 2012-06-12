@@ -51,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="KanjiDatabase">
-      <HintPath>..\..\NeoDatis for Windows Phone 7\Test\KanjiDatabase\Bin\Release\KanjiDatabase.dll</HintPath>
+      <HintPath>..\..\ref\KanjiDatabase.dll</HintPath>
     </Reference>
     <Reference Include="KanjiFlashcards.ServiceContracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone" />

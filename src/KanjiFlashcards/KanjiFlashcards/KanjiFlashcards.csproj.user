@@ -4,13 +4,13 @@
     <FullDeploy>false</FullDeploy>
   </PropertyGroup>
   <PropertyGroup>
-    <ReferencePath>C:\Users\Steffen\Documents\Projects\KanjiFlashcards\ref\</ReferencePath>
+    <ReferencePath>C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\ref\</ReferencePath>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{C089C8C0-30E0-4E22-80C0-CE093F111A43}">
         <SilverlightMobileCSProjectFlavor>
-          <FullDeploy>True</FullDeploy>
+          <FullDeploy>False</FullDeploy>
         </SilverlightMobileCSProjectFlavor>
       </FlavorProperties>
     </VisualStudio>
