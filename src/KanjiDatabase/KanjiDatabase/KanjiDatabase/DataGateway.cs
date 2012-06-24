@@ -43,14 +43,14 @@ namespace KanjiDatabase
 
         #region Kanji
 
-        public Dictionary<Int64, KanjiData> GetAllKanji()
+        public List<KanjiData> GetAllKanji()
         {
-            var result = new Dictionary<Int64, KanjiData>();
+            var result = new List<KanjiData>();
             using (IDatabaseClient client = OpenDatabaseClient()) {
                 client.SelectCommand = SQL_KANJI_ALL_SELECT;
                 DataTable data = client.Read();
                 foreach (DataRow row in data.Rows)
-                    result.Add(Convert.ToInt64(row["Id"]), new KanjiData() { Literal = row["Literal"].ToString(), OnYomi = row["OnYomi"].ToString(), KunYomi = row["KunYomi"].ToString(), Meaning = row["Meaning"].ToString(), JLPTLevel = (JLPT)Enum.Parse(typeof(JLPT), row["JLPT"].ToString()), StrokeCount = Convert.ToInt32(row["StrokeCount"]) });
+                    result.Add(new KanjiData() { Id = Convert.ToInt32(row["Id"]), Literal = row["Literal"].ToString(), OnYomi = row["OnYomi"].ToString(), KunYomi = row["KunYomi"].ToString(), Meaning = row["Meaning"].ToString(), JLPTLevel = (JLPT)Enum.Parse(typeof(JLPT), row["JLPT"].ToString()), StrokeCount = Convert.ToInt32(row["StrokeCount"]) });
             }
             return result;
         }

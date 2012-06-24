@@ -1,0 +1,5 @@
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\KanjiDatabase\Bin\Debug\KanjiDatabase.dll
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\KanjiDatabase\Bin\Debug\KanjiDatabase.pdb
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\KanjiDatabase\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\KanjiDatabase\obj\Debug\KanjiDatabase.dll
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\KanjiDatabase\obj\Debug\KanjiDatabase.pdb

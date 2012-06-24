@@ -92,10 +92,6 @@
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NeoDatis\NeoDatis\NeoDatis.csproj">
-      <Project>{EAC88E5E-0F0C-49D7-BDA1-38EFB8D518B8}</Project>
-      <Name>NeoDatis</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KanjiDatabase\KanjiDatabase.csproj">
       <Project>{2B23FB38-7108-457C-B63E-20E6158F2A9D}</Project>
       <Name>KanjiDatabase</Name>

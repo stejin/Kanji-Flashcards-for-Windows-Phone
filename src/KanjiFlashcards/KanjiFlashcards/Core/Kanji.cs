@@ -16,6 +16,8 @@ namespace KanjiFlashcards.Core
     public class Kanji
     {
 
+        public int Id { get; private set; }
+        
         public string Literal { get; private set; }
 
         public string Meaning { get; private set; }
@@ -28,14 +30,15 @@ namespace KanjiFlashcards.Core
 
         public int StrokeCount { get; private set; }
 
-        public Kanji(KanjiData data) : this(data.Literal, data.Meaning, data.OnYomi, data.KunYomi, (JLPT)data.JLPTLevel, data.StrokeCount)
+        public Kanji(KanjiData data) : this(data.Id, data.Literal, data.Meaning, data.OnYomi, data.KunYomi, (JLPT)data.JLPTLevel, data.StrokeCount)
         {  }
 
-        public Kanji(KanjiMessage kanjiMessage) : this(kanjiMessage.Literal, kanjiMessage.Meaning, kanjiMessage.OnYomi, kanjiMessage.KunYomi, (JLPT)kanjiMessage.Jlpt, kanjiMessage.StrokeCount)
+        public Kanji(KanjiMessage kanjiMessage) : this(kanjiMessage.Id, kanjiMessage.Literal, kanjiMessage.Meaning, kanjiMessage.OnYomi, kanjiMessage.KunYomi, (JLPT)kanjiMessage.Jlpt, kanjiMessage.StrokeCount)
         {  }
 
-        public Kanji(string literal, string meaning, string onYomi, string kunYomi, JLPT jlptLevel, int strokeCount)
+        public Kanji(int id, string literal, string meaning, string onYomi, string kunYomi, JLPT jlptLevel, int strokeCount)
         {
+            Id = id;
             Literal = literal;
             Meaning = meaning;
             OnYomi = onYomi;

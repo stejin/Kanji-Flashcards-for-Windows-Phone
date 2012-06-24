@@ -1,0 +1,17 @@
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\ApplicationIcon.png
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\Background.png
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\Test.dll
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\Test.pdb
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\AppManifest.xaml
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\Test.xap
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\NeoDatis.dll
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\NeoDatis.pdb
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\App.g.i.cs
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\MainPage.g.i.cs
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\Test.g.resources
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\Test.dll
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\Test.pdb
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\obj\Debug\XapCacheFile.xml
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\KanjiDatabase.dll
+C:\Users\Steffen\Documents\Projects\NeoDatis for Windows Phone 7\Test\Test\Bin\Debug\KanjiDatabase.pdb

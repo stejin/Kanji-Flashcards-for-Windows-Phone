@@ -44,14 +44,16 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="Kanji" Text="漢" Margin="9,-7,0,0" FontSize="96" FontFamily="Calibri"/>
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,17">
+            <TextBlock x:Name="Kanji" Text="漢" Margin="0,0,0,0" FontSize="140" FontFamily="Yu Gothic" TextAlignment="Center" VerticalAlignment="Top" />
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel x:Name="DetailsPanel" Visibility="Visible">
-                <TextBlock x:Name="DetailsBlock" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" IsHitTestVisible="False" />
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="DetailsBlock" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" IsHitTestVisible="False" FontFamily="Yu Gothic" FontSize="40" />
+                </ScrollViewer>
             </StackPanel>
         </Grid>
     </Grid>

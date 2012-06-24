@@ -31,7 +31,7 @@
            <!-- <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/> -->
         </StackPanel>
         
-        <Grid x:Name="TodayKanji" Grid.Row="1" ShowGridLines="True" Background="#FF464646" Margin="0,10,0,0" ManipulationStarted="TodayKanji_ManipulationStarted">
+        <Grid x:Name="TodayKanji" Grid.Row="1" ShowGridLines="True" Background="{StaticResource PhoneAccentBrush}" Margin="0,10,0,0" ManipulationStarted="TodayKanji_ManipulationStarted">
             <Grid.RowDefinitions>
                 <RowDefinition Height="173" />
             </Grid.RowDefinitions>
@@ -39,8 +39,8 @@
                 <ColumnDefinition Width="173" />
                 <ColumnDefinition Width="307" />
             </Grid.ColumnDefinitions>
-            <TextBlock Name="TodayKanjiText" Text="漢" Grid.Column="0" Grid.Row="0" FontSize="80" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-10,0,0" />
-            <TextBlock Name="TodayKanjiDetails" Text="Today's Kanji" Grid.Column="1" Grid.Row="0" FontSize="24" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Tag="Today's Kanji" />
+            <TextBlock Name="TodayKanjiText" Text="漢" FontSize="100" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" FontFamily="Yu Gothic" Height="165" TextAlignment="Center" />
+            <TextBlock Name="TodayKanjiDetails" Text="Today's Kanji" Grid.Column="1" Grid.Row="0" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Tag="Today's Kanji" FontFamily="Yu Gothic" />
         </Grid>
         
         <!--ContentPanel - place additional content here-->

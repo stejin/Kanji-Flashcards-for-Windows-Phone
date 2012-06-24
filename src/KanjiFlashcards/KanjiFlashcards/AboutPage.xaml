@@ -34,7 +34,7 @@
                 <TextBlock Text="Instructions" TextDecorations="Underline" />
                 <TextBlock Text="Move your finger from right to left accross the screen to advance to the next kanji and from left to right to return to the previous flashcard.  Tap the screen to reveal the full flashcard." TextWrapping="Wrap" />
                 <TextBlock Text=" " />
-                <TextBlock x:Name="Version" Text="Version: 1.4" />
+                <TextBlock x:Name="Version" Text="Version: 1.5" />
                 <TextBlock Text=" " />
                 <TextBlock x:Name="DatabaseVersion" Text="Database Revision: 0" Tag="Database Revision: {0}" />
                 <TextBlock Text=" " />

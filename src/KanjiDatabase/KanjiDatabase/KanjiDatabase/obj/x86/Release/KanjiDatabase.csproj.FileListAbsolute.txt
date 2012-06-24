@@ -1,0 +1,7 @@
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\bin\Release\KanjiDatabase.exe.config
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\bin\Release\KanjiDatabase.exe
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\bin\Release\KanjiDatabase.pdb
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\bin\Release\NeoDatis.dll
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\obj\x86\Release\KanjiDatabase.exe
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\KanjiDatabase\KanjiDatabase\obj\x86\Release\KanjiDatabase.pdb

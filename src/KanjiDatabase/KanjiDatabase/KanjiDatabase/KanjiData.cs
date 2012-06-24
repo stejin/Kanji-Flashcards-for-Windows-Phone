@@ -5,6 +5,8 @@ namespace KanjiDatabase
     public class KanjiData
     {
 
+        public int Id;
+
         public string Literal;
 
         public string Meaning;

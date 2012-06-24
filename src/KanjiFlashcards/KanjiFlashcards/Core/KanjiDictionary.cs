@@ -31,7 +31,7 @@ namespace KanjiFlashcards.Core
         private List<int> sequence;
 
         private const string baseFilePath = "Data/kanjidic2.neodatis";
-        private const string kanjiDatabaseUri = @"http://app.stejin.org/wp7/files/kanjidic2.neodatis.zip";
+        private const string kanjiDatabaseUri = @"http://test.stejin.org/wp7/files/kanjidic2.neodatis.zip";
 
         public event EventHandler DatabaseUpdateCompleted;
         public event EventHandler<DatabaseUpdateErrorEventArgs> DatabaseUpdateError;

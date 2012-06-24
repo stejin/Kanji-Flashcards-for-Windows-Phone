@@ -1,0 +1,17 @@
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\MainWindow.baml
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\App.g.cs
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\CleanKanjiDatabase_MarkupCompile.cache
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\CleanKanjiDatabase.g.resources
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\CleanKanjiDatabase.Properties.Resources.resources
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\bin\Debug\CleanKanjiDatabase.exe
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\bin\Debug\CleanKanjiDatabase.pdb
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\bin\Debug\NeoDatis.dll
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\bin\Debug\NeoDatis.pdb
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\CleanKanjiDatabase.exe
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\obj\x86\Debug\CleanKanjiDatabase.pdb
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\bin\Debug\KanjiDatabase.exe
+C:\Users\Steffen\Documents\Projects\KanjiDatabase\CleanKanjiDatabase\CleanKanjiDatabase\bin\Debug\KanjiDatabase.pdb

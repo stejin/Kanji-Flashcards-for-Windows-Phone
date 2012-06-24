@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="KanjiDatabase">
+</Property><Property Name="Solution File" Value="C:\Users\Steffen\Documents\Projects\KanjiDatabase\KanjiDatabase\KanjiDatabase.sln">
+</Property><Property Name="Date" Value="March-17-11">
+</Property><Property Name="Time" Value="13:31:17 PM">
+</Property></Properties><Event ErrorLevel="0" Project="NeoDatis" Source="..\..\1.9-beta6-dot-net\1.9-beta6-dot-net\src\NeoDatis.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="NeoDatis" Source="..\..\1.9-beta6-dot-net\1.9-beta6-dot-net\src\NeoDatis.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="NeoDatis" Source="..\..\1.9-beta6-dot-net\1.9-beta6-dot-net\src\NeoDatis.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

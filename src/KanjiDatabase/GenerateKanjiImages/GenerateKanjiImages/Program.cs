@@ -15,18 +15,18 @@ namespace GenerateKanjiImages
     {
         static void Main(string[] args)
         {
-            GeneratImages();            
+            GenerateImages();            
         }
 
-        private static void GeneratImages()
+        private static void GenerateImages()
         {
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
             var kanjiList = DataGateway.Instance.GetAllKanji();
             foreach (var kanji in kanjiList) {
-                var kanjiImage = CreateBitmapImage(kanji.Value.Literal);
-                kanjiImage.Save(String.Format(@"C:\Users\Steffen\Documents\Projects\KanjiDatabase\KanjiImages\{0}.png", kanji.Key.ToString()), ImageFormat.Png);
-                Console.WriteLine("{0}.png generated.", kanji.Key.ToString());
+                var kanjiImage = CreateBitmapImage(kanji.Literal);
+                kanjiImage.Save(String.Format(@"C:\Users\Steffen\Documents\Projects\KanjiDatabase\KanjiImages\{0}.png", kanji.ToString()), ImageFormat.Png);
+                Console.WriteLine("{0}.png generated.", kanji.Id.ToString());
             }
             Console.WriteLine("Done!");
             Console.ReadKey();

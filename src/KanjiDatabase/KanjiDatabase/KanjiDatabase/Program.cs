@@ -11,37 +11,47 @@ namespace KanjiDatabase
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Press any key to start.");
+            Console.ReadKey();
 
-           // CopyToDatabase();
-            //   GenerateDatabase("kanjidic2.neodatis");
-            // TestDatabase("kanjidic2.neodatis");
-            TestDatabase2();
+            //  CopyToDatabase();
+            GenerateDatabase(@"C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\kanjidic2.neodatis");
+            TestDatabase(@"C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\kanjidic2.neodatis");
+            // TestDatabase2();
         }
 
         private static void GenerateDatabase(string databaseName)
         {
-            var kanjiList = LoadFromFile();
+            Console.WriteLine("Generate " + databaseName);
+            // var kanjiList = LoadFromFile();
+            var kanjiList = DataGateway.Instance.GetAllKanji();
+            Console.WriteLine("{0} kanji read", kanjiList.Count);
 
-            ODB odb = ODBFactory.Open(databaseName);
+            using (ODB odb = ODBFactory.Open(databaseName))  {
+                kanjiList.ForEach(k => odb.Store(k));
 
-            kanjiList.ForEach(k => odb.Store(k));
+                Console.WriteLine("Objects saved.");
+                
+                odb.GetClassRepresentation(typeof(KanjiData)).AddUniqueIndexOn("id-index", new string[] { "Id" }, true);
+                
+                odb.GetClassRepresentation(typeof(KanjiData)).AddUniqueIndexOn("literal-index", new string[] { "Literal" }, true);
 
-       //     odb.GetClassRepresentation(typeof(KanjiData)).AddUniqueIndexOn("literal-index", new string[] { "Literal" }, true);
+                odb.GetClassRepresentation(typeof(KanjiData)).AddIndexOn("jlpt-index", new string[] { "JLPTLevel" }, true);
 
-       //     odb.GetClassRepresentation(typeof(KanjiData)).AddIndexOn("jlpt-index", new string[] { "JLPTLevel" }, true);
+                Console.WriteLine("Indexes created.");
 
-            odb.Commit();
+                odb.Commit();
+            }
 
-            odb.Close();
+            Console.WriteLine("Changes committed. Database closed.");
         }
 
         private static void TestDatabase(string databaseName)
         {
-            ODB odb = ODBFactory.Open(databaseName);
-
-            var data = odb.GetObjects<KanjiData>();           
-
-            odb.Close();
+            using (ODB odb = ODBFactory.Open(databaseName)) {
+                var data = odb.GetObjects<KanjiData>();
+                Console.WriteLine("{0} objects in database {1}", data.Count, databaseName);
+            }
         }
 
         private static List<KanjiData> LoadFromFile()
@@ -103,8 +113,8 @@ namespace KanjiDatabase
             Console.ReadKey();
             var kanjiTable = DataGateway.Instance.GetAllKanji();
             List<string> kanjiInDatabase = new List<string>(kanjiTable.Count);
-            kanjiTable.Values.ToList<KanjiData>().ForEach(k => kanjiInDatabase.Add(k.Literal));
-            ODB odb = ODBFactory.Open(@"C:\Users\Steffen\Documents\Projects\KanjiDatabase\kanjidic2.neodatis");
+            kanjiTable.ForEach(k => kanjiInDatabase.Add(k.Literal));
+            ODB odb = ODBFactory.Open(@"C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\kanjidic2.neodatis");
             var kanjiList = odb.GetObjects<KanjiData>();
             foreach (var kanji in kanjiList) {
                 if (kanjiInDatabase.Contains(kanji.Literal)) {
