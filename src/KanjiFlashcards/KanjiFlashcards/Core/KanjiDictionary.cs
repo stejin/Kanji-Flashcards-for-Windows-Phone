@@ -94,14 +94,14 @@ namespace KanjiFlashcards.Core
             }
         }
 
-        public void LoadFromDatabase(List<string> reviewList)
+        public void LoadFromDatabase(List<string> kanjiList)
         {
             ODB odb = ODBFactory.Open(baseFilePath);
 
             try {
                 kanjiDictionary = new Dictionary<string, Kanji>();
 
-                foreach (string literal in reviewList) {
+                foreach (string literal in kanjiList) {
                     IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Equal("Literal", literal));
                     var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
                     if (data.GetFirst() != null)
@@ -118,6 +118,46 @@ namespace KanjiFlashcards.Core
             } finally {
                 odb.Close();
             }
+        }
+
+        public void SetDictionary(Dictionary<string, Kanji> dictionary)
+        {
+            kanjiDictionary = dictionary;
+            GenerateSequence();
+        }
+
+        public Kanji GetKanjiFromDatabase(int kanjiId)
+        {
+            ODB odb = ODBFactory.Open(baseFilePath);
+            try {
+                IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Equal("Id", kanjiId));
+                var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
+                if (data.GetFirst() != null) {
+                    return new Kanji(data.GetFirst());
+                }
+            } catch {
+
+            } finally {
+                odb.Close();
+            }
+            return null;
+        }
+
+        public Kanji GetKanjiFromDatabase(string literal)
+        {
+            ODB odb = ODBFactory.Open(baseFilePath);
+            try {
+                IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Equal("Literal", literal));
+                var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
+                if (data.GetFirst() != null) {
+                    return new Kanji(data.GetFirst());
+                }
+            } catch {
+
+            } finally {
+                odb.Close();
+            }
+            return null;
         }
 
         private void GenerateSequence()

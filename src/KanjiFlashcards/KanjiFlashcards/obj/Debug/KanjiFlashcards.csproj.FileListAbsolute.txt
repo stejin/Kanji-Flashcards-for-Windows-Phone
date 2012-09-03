@@ -31,3 +31,4 @@ C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiFl
 C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiFlashcards\KanjiFlashcards\obj\Debug\KanjiFlashcards.dll
 C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiFlashcards\KanjiFlashcards\obj\Debug\KanjiFlashcards.pdb
 C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiFlashcards\KanjiFlashcards\obj\Debug\XapCacheFile.xml
+C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiFlashcards\KanjiFlashcards\obj\Debug\ReviewListPage.g.i.cs

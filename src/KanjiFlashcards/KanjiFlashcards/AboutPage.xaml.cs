@@ -20,7 +20,6 @@ namespace KanjiFlashcards
         public AboutPage()
         {
             InitializeComponent();
-
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)

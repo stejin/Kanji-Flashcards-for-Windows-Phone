@@ -10,7 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
     shell:SystemTray.IsVisible="True"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit" HorizontalContentAlignment="Left" IsEnabled="True" HorizontalAlignment="Left">
 
@@ -22,47 +22,38 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,12,28">
             <TextBlock x:Name="ApplicationTitle" Text="Kanji Lookup" Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <TextBlock Text="Enter kanji id from" FontSize="20" />
+                <TextBlock Text="Enter kanji or kanji id from" FontSize="20" />
                 <HyperlinkButton TargetName="_blank" NavigateUri="http://app.stejin.org/wp7/KanjiList" Content="http://app.stejin.org/wp7/KanjiList" HorizontalAlignment="Left" FontSize="20" />
                 <Grid x:Name="LookupPanel" Grid.Row="2" Margin="0,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70" />
-                        <RowDefinition Height="15" />
-                        <RowDefinition Height="120" />
+                        <RowDefinition Height="90" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="350" />
-                        <ColumnDefinition Width="106" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="KanjiId" Width="362" InputScope="Number" HorizontalAlignment="Left" HorizontalContentAlignment="Center" BorderThickness="3" Margin="-12,0,0,0" Padding="0,2,2,0" />
-                    <Button x:Name="Submit" HorizontalAlignment="Left" Click="Submit_Click" Width="130" Grid.ColumnSpan="2" Margin="337,0,0,0">Submit</Button>
-                    <StackPanel x:Name="KanjiIdentifier" Grid.Column="0" Grid.Row="2" >
-                    </StackPanel>
-                    <StackPanel x:Name="KanjiImage" Grid.Column="1" Grid.Row="2" />
+                    <TextBox x:Name="KanjiInput" Width="480" HorizontalAlignment="Left" HorizontalContentAlignment="Center" BorderThickness="3" Margin="-12,0,0,0" Padding="0,2,2,0" />
+                    <Button x:Name="Submit" HorizontalAlignment="Center" Click="Submit_Click" Width="200" Grid.Column="0" Grid.Row="1" Margin="0,0,0,0">Submit</Button>
                 </Grid>
-                <StackPanel x:Name="KanjiDetails" />
+                <ScrollViewer x:Name="MeaningScrollViewer" Margin="-12,0,-12,0" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Projection>
+                        <PlaneProjection/>
+                    </ScrollViewer.Projection>
+                    <StackPanel x:Name="RequestDetails" Grid.Row="2" />
+                </ScrollViewer>
             </StackPanel>
         </Grid>
 
-        <toolkit:PerformanceProgressBar HorizontalAlignment="Left" Width="468" Margin="12,50,0,0" Name="progressBar" VerticalAlignment="Top" Height="22" IsIndeterminate="True" />
+        <toolkit:PerformanceProgressBar HorizontalAlignment="Left" Width="456" Margin="12,50,0,0" Name="progressBar" VerticalAlignment="Top" Height="22" IsIndeterminate="True" />
 
     </Grid>
  
-    <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.favs.addto.rest.png" Text="Add to review list" Click="AddToReviewListButton_Click" />
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.delete.rest.png" Text="Remove from review list" Click="RemoveFromReviewListButton_Click" />
-            <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Report broken kanji" Click="ApplicationBarMenuItem_Click" />
-            </shell:ApplicationBar.MenuItems>
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-
 </phone:PhoneApplicationPage>

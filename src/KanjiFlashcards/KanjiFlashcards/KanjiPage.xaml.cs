@@ -19,7 +19,7 @@ namespace KanjiFlashcards
     {
         private int currentKanji;
 
-        private KanjiFlashcards.Core.Kanji kanji;
+        private Core.Kanji kanji;
 
         public KanjiPage()
         {
@@ -46,8 +46,8 @@ namespace KanjiFlashcards
         {
             base.OnNavigatedTo(e);
 
-            if (App.KanjiMode == Core.Mode.Review && ApplicationBar.Buttons.Count == 2)
-                ApplicationBar.Buttons.Remove(ApplicationBar.Buttons[0]);
+            if (App.KanjiMode == Core.Mode.Review && ApplicationBar.MenuItems.Count == 3)
+                ApplicationBar.MenuItems.Remove(ApplicationBar.MenuItems[0]);
 
             // (this.ApplicationBar.MenuItems[0] as ApplicationBarMenuItem).IsEnabled = App.AppSettings.IsExperimentalFunctionalityEnabled;
 
@@ -71,93 +71,78 @@ namespace KanjiFlashcards
 
         private void ShowKanji()
         {
-            DetailsBlock.Text = "";
-            kanji = App.KanjiDict.GetKanji(currentKanji);
+            Core.Kanji kanji = App.KanjiDict.GetKanji(currentKanji);
             App.CurrentKanji = kanji.Literal;
             Kanji.Text = kanji.Literal;
+            StrokeCount.Text = "Strokes: " + kanji.StrokeCount.ToString();
+            Number.Text = currentKanji + 1 + " / " + App.KanjiDict.KanjiCount;
+            JlptLevel.Text = "JLPT Level: " + kanji.JLPTLevel.ToString().Replace("Level", "");
+            OnYomi.Text = kanji.OnYomi.Replace(", ", Environment.NewLine);
+            KunYomi.Text = kanji.KunYomi.Replace(", ", Environment.NewLine);
+            Meaning.Text = kanji.Meaning.Replace(", ", Environment.NewLine);
+            (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = App.KanjiDict.IsIndexValid(currentKanji - 1);
+            (this.ApplicationBar.Buttons[1] as ApplicationBarIconButton).IsEnabled = App.KanjiDict.IsIndexValid(currentKanji - 1);
+            (this.ApplicationBar.Buttons[2] as ApplicationBarIconButton).IsEnabled = App.KanjiDict.IsIndexValid(currentKanji + 1);
+            (this.ApplicationBar.Buttons[3] as ApplicationBarIconButton).IsEnabled = App.KanjiDict.IsIndexValid(currentKanji + 1);
+
             switch (App.KanjiMode) {
                 case Core.Mode.Flashcards:
-                    (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = !App.ReviewList.KanjiList.Contains(kanji.Literal);
-                    (this.ApplicationBar.Buttons[1] as ApplicationBarIconButton).IsEnabled = App.ReviewList.KanjiList.Contains(kanji.Literal);
+                    (this.ApplicationBar.MenuItems[0] as ApplicationBarMenuItem).IsEnabled = !App.ReviewList.KanjiList.Contains(kanji.Literal);
+                    (this.ApplicationBar.MenuItems[1] as ApplicationBarMenuItem).IsEnabled = App.ReviewList.KanjiList.Contains(kanji.Literal);    
                     break;
                 case Core.Mode.Review:
-                    (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = App.ReviewList.KanjiList.Contains(kanji.Literal);
+                    (this.ApplicationBar.MenuItems[0] as ApplicationBarMenuItem).IsEnabled = App.ReviewList.KanjiList.Contains(kanji.Literal);    
                     break;
             }
         }
-        
-        private void ShowDetails()
-        {
-            if (DetailsBlock.Text != string.Empty)
-                return;
 
-             System.Text.StringBuilder text = new System.Text.StringBuilder();
-             for (int i = 0; i < 5; i++) {
-                 if (i > 0)
-                     text.Append(Environment.NewLine).Append(Environment.NewLine);
-                 switch (i) {
-                     case 0:
-                         text.Append("On-Yomi" + Environment.NewLine + kanji.OnYomi);
-                         break;
-                     case 1:
-                         text.Append("Kun-Yomi" + Environment.NewLine + kanji.KunYomi);
-                         break;
-                     case 2:
-                         text.Append("Meaning" + Environment.NewLine + kanji.Meaning);
-                         break;
-                     case 3:
-                         text.Append("JLPT Level: " + kanji.JLPTLevel.ToString().Replace("Level", ""));
-                         break;
-                     case 4:
-                         text.Append("Strokes: " + kanji.StrokeCount.ToString());
-                         break;
-                 }
-             }
-             DetailsBlock.Text = text.ToString();           
-        }
-
-        private void MoveForward()
+        private void MoveForward(object sender, EventArgs e)
         {
             ((PhoneApplicationFrame)App.Current.RootVisual).Style = (Style)App.Current.Resources["forwardTransition"];
-
-            if (!App.KanjiDict.IsIndexValid(currentKanji + 1)) {
-                MessageBox.Show("Reached last kanji in list.");
-                return;
-            }
 
             currentKanji += 1;
 
             ExitToLeft.Begin();
         }
 
-        private void MoveBackward()
+        private void MoveLast(object sender, EventArgs e)
+        {
+            ((PhoneApplicationFrame)App.Current.RootVisual).Style = (Style)App.Current.Resources["forwardTransition"];
+
+            currentKanji = App.KanjiDict.KanjiCount - 1;
+
+            ExitToLeft.Begin();
+        }
+
+        private void MoveBackward(object sender, EventArgs e)
         {
             ((PhoneApplicationFrame)App.Current.RootVisual).Style = (Style)App.Current.Resources["backwardTransition"];
-
-            if (!App.KanjiDict.IsIndexValid(currentKanji - 1)) {
-                MessageBox.Show("Reached first kanji in list.");
-                return;
-            }
 
             currentKanji -= 1;
 
             ExitToRight.Begin();
         }
 
-        protected override void OnManipulationCompleted(ManipulationCompletedEventArgs args)
+        private void MoveFirst(object sender, EventArgs e)
         {
-            if (args.TotalManipulation.Translation.X == 0)
-                ShowDetails();
+            ((PhoneApplicationFrame)App.Current.RootVisual).Style = (Style)App.Current.Resources["backwardTransition"];
 
-            if (args.TotalManipulation.Translation.X > 0)
-                MoveBackward();
+            currentKanji = 0;
 
-            if (args.TotalManipulation.Translation.X < 0)
-                MoveForward();
-
-            args.Handled = true;
-            base.OnManipulationCompleted(args);
+            ExitToRight.Begin();
         }
+
+        //protected override void OnManipulationCompleted(ManipulationCompletedEventArgs args)
+        //{
+        //    if (args.TotalManipulation.Translation.X > 0)
+        //        MoveBackward();
+
+        //    if (args.TotalManipulation.Translation.X < 0)
+        //        MoveForward();
+
+        //    args.Handled = true;
+        //    base.OnManipulationCompleted(args);
+        //}
 
         private void AddToReviewListButton_Click(object sender, EventArgs e)
         {
@@ -203,5 +188,13 @@ namespace KanjiFlashcards
             };
             emailComposeTask.Show();
         }
+
+        //private void TextBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        //{
+
+        //    foreach (Storyboard s in phoneApplicationPage.Resources.Values.OfType<System.Windows.Media.Animation.Storyboard>()) {
+        //        s.SetValue(Storyboard.TargetNameProperty, "ReadingScrollViewer");
+        //    }
+        //}
     }
 }

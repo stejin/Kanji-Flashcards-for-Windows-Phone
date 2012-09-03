@@ -17,6 +17,7 @@ using System.Xml.Serialization;
 using Microsoft.Phone.Tasks;
 using Microsoft.Phone.Shell;
 using KanjiFlashcards.Core;
+using System.Text;
 
 namespace KanjiFlashcards
 {
@@ -38,124 +39,79 @@ namespace KanjiFlashcards
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            int kanjiId;
-            if (Int32.TryParse(KanjiId.Text, out kanjiId)) {
-                if (NetworkInterface.GetIsNetworkAvailable()) {
-                    progressBar.Visibility = System.Windows.Visibility.Visible;
-
-                    WebClient client = new WebClient();
-                    client.OpenReadCompleted += new OpenReadCompletedEventHandler(LoadKanjiDetails);
-                    client.OpenReadAsync(new Uri(App.BaseUrl + "/KanjiForId?" + kanjiId));
-
-                    KanjiId.IsEnabled = false;
+            progressBar.Visibility = System.Windows.Visibility.Visible;
+            RequestDetails.Children.Clear();
+            var result = new Dictionary<string, Kanji>();
+            foreach (string token in GetTokens(KanjiInput.Text)) {
+                TextBlock currentTextBlock = new TextBlock();
+                currentTextBlock.FontFamily = new FontFamily("Yu Gothic");
+                currentTextBlock.Text = String.Format("{0} => ", token);
+                RequestDetails.Children.Add(currentTextBlock);
+                Kanji kanji;
+                int kanjiId;
+                if (Int32.TryParse(token, out kanjiId)) {
+                    kanji = App.KanjiDict.GetKanjiFromDatabase(kanjiId);
                 } else {
-                    KanjiDetails.Children.Clear();
-                    MessageBox.Show("Unable no connect to Kanji Lookup Service.", "No Data Connection", MessageBoxButton.OK);
+                    kanji = App.KanjiDict.GetKanjiFromDatabase(token);
                 }
-            } else {
-                MessageBox.Show("Please enter a natural number (positive integer) with no leading or trailing spaces.", "Kanji Identifier Not Valid", MessageBoxButton.OK);
-            }
-        }
-
-        private void LoadKanjiDetails(object sender, OpenReadCompletedEventArgs args)
-        {
-            KanjiIdentifier.Children.Clear();
-            KanjiImage.Children.Clear();
-            KanjiDetails.Children.Clear();
-
-            TextBlock kanjiIdentifierText;
-            TextBlock kanjiDetailText;
-
-            (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = false;
-            (this.ApplicationBar.Buttons[1] as ApplicationBarIconButton).IsEnabled = false;
-            try {
-                var serializer = new XmlSerializer(typeof(KanjiForIdResponse));
-                KanjiForIdResponse response = serializer.Deserialize(args.Result) as KanjiForIdResponse;
-
-                switch (response.Kanji.Id) {
-                    case -1:
-                        kanjiDetailText = new TextBlock() { Text = "Kanji Lookup Service temporarily not available. Please try again later.", TextWrapping = TextWrapping.Wrap };
-                        KanjiDetails.Children.Add(kanjiDetailText);
-                        break;
-                    case 0:
-                        kanjiDetailText = new TextBlock() { Text = "Kanji not found.", TextWrapping = TextWrapping.Wrap };
-                        KanjiDetails.Children.Add(kanjiDetailText);
-                        break;
-                    default:
-                        kanji = new Kanji(response.Kanji);
-                        currentKanji = response.Kanji.Id;
-
-                        Image kanjiImage = new Image() { Source = new BitmapImage(new Uri(App.AppSettings.KanjiImageBaseUrl + response.Kanji.Id.ToString() + ".png", UriKind.Absolute)), Width = 110, Height = 110, HorizontalAlignment = System.Windows.HorizontalAlignment.Left };
-                        KanjiImage.Children.Add(kanjiImage);
-
-                        kanjiIdentifierText = new TextBlock() { Text = response.Kanji.Literal, FontSize = 96, Margin = new Thickness(0, -20, 0, 0) };
-                        KanjiIdentifier.Children.Add(kanjiIdentifierText);
-
-                        System.Text.StringBuilder text = new System.Text.StringBuilder();
-                        text.Append("Kun-Yomi: " + response.Kanji.KunYomi);
-                        text.Append(Environment.NewLine).Append(Environment.NewLine);
-                        text.Append("On-Yomi: " + response.Kanji.OnYomi);
-                        text.Append(Environment.NewLine).Append(Environment.NewLine);
-                        text.Append("Meaning: " + response.Kanji.Meaning);
-                        text.Append(Environment.NewLine).Append(Environment.NewLine);
-                        text.Append("JLPT: " + response.Kanji.Jlpt.ToString());
-                        text.Append(Environment.NewLine).Append(Environment.NewLine);
-                        text.Append("Strokes: " + response.Kanji.StrokeCount.ToString());
-                        kanjiDetailText = new TextBlock() { Text = text.ToString(), TextWrapping = TextWrapping.Wrap };
-                        KanjiDetails.Children.Add(kanjiDetailText);
-
-                        (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = !App.ReviewList.KanjiList.Contains(kanji.Literal);
-                        (this.ApplicationBar.Buttons[1] as ApplicationBarIconButton).IsEnabled = App.ReviewList.KanjiList.Contains(kanji.Literal);
-
-                        break;
+                if (kanji == null ) {
+                    currentTextBlock.Text += "Not found";
+                    continue;
                 }
-            } catch {
-                kanjiDetailText = new TextBlock() { Text = "Kanji Lookup Service temporarily not available. Please try again later.", TextWrapping = TextWrapping.Wrap };
-                KanjiDetails.Children.Add(kanjiDetailText);
+                currentTextBlock.Text += kanji.Literal + " : ";
+                if (result.ContainsKey(kanji.Literal)) {
+                    currentTextBlock.Text += "Skipped (already added)";
+                } else {
+                    currentTextBlock.Text += "Added";                                    
+                    result.Add(kanji.Literal, kanji);
+                }
             }
-            KanjiId.IsEnabled = true;
             progressBar.Visibility = System.Windows.Visibility.Collapsed;
+            if (result.Count == 0) {
+                TextBlock failureTextBlock = new TextBlock();
+                failureTextBlock.FontFamily = new FontFamily("Yu Gothic");
+                Color currentAccentColor = (Color)Application.Current.Resources["PhoneAccentColor"];
+                failureTextBlock.Foreground = new SolidColorBrush(currentAccentColor); 
+                failureTextBlock.Text = "No kanji found. Please try again.";
+                RequestDetails.Children.Add(failureTextBlock);
+            } else {
+                App.KanjiDict.SetDictionary(result);
+                this.NavigationService.Navigate(new Uri("/KanjiPage.xaml", UriKind.Relative));
+            }
         }
 
-        private void AddToReviewListButton_Click(object sender, EventArgs e)
+        private string Cleanse(string input)
         {
-            App.ReviewList.KanjiList.Add(kanji.Literal);
-            App.ReviewList.Save();
-            (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = false;
-            (this.ApplicationBar.Buttons[1] as ApplicationBarIconButton).IsEnabled = true;
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < input.Length; i++) {
+                char c = input[i];
+                if (Char.IsWhiteSpace(c) || Char.IsControl(c) || Char.IsPunctuation(c) || Char.IsSeparator(c) || Char.IsSymbol(c) ) {
+                    continue;
+                }
+                if (i > 0 && Char.IsNumber(c) != Char.IsNumber(input, i - 1)) {
+                    result.Append(" ");
+                }
+                result.Append(c);                
+            }
+            return result.ToString();
         }
 
-        private void RemoveFromReviewListButton_Click(object sender, EventArgs e)
-        {
-            App.ReviewList.KanjiList.Remove(kanji.Literal);
-            App.ReviewList.Save();
-            (this.ApplicationBar.Buttons[0] as ApplicationBarIconButton).IsEnabled = true;
-            (this.ApplicationBar.Buttons[1] as ApplicationBarIconButton).IsEnabled = false;
+        private List<string> GetTokens(string text) {
+            var result = new List<string>();
+            var kanjiText = Cleanse(text);
+            foreach (string token in kanjiText.Split(' ')) {
+                int kanjiId;
+                if (Int32.TryParse(token, out kanjiId)) {
+                    result.Add(kanjiId.ToString());
+                } else {
+                    foreach (char literal in token) {
+                        result.Add(literal.ToString());
+                    }
+                }
+            }
+            return result;
         }
 
-        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
-        {
-            var emailComposeTask = new EmailComposeTask {
-                To = "app@stejin.org",
-                Subject = "Reported Kanji: " + kanji.Literal,
-                Body = "Id: " + currentKanji
-                + Environment.NewLine
-                + "Literal: " + kanji.Literal
-                + Environment.NewLine
-                + "On-Yomi: " + kanji.OnYomi
-                + Environment.NewLine
-                + "Kun-Yomi: " + kanji.KunYomi
-                + Environment.NewLine
-                + "Meaning: " + kanji.Meaning
-                + Environment.NewLine
-                + "JLPT: " + kanji.JLPTLevel.ToString()
-                + Environment.NewLine
-                + "Stroke Count: " + kanji.StrokeCount
-                + Environment.NewLine
-                + Environment.NewLine
-                + "JLPT Setting: " + App.AppSettings.JLPTLevels
-            };
-            emailComposeTask.Show();
-        }
+        
     }
 }

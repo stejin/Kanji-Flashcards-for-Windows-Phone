@@ -37,7 +37,6 @@ namespace KanjiFlashcards
                     var image = icon.Source as BitmapImage;
                     image.UriSource = new Uri(image.UriSource.OriginalString.Replace(".dark.", ".light."), UriKind.Relative);
                 }
-                TodayKanji.Background = new SolidColorBrush(new Color() { R = 216, G = 216, B = 216, A = 255});
             }
 
             UpdateTodayKanji(App.AppSettings.TodayKanji);
@@ -130,17 +129,9 @@ namespace KanjiFlashcards
             TodayKanjiDetails.Text = text.ToString();
         }
 
-        private void Settings_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
-        {
-            this.NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
-            e.Complete();
-            e.Handled = true;
-        }
-
-        private void Kanji_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
+        private void FlashcardsListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             if (isLoading) {
-                e.Complete();
                 e.Handled = true;
                 return;
             }
@@ -155,7 +146,6 @@ namespace KanjiFlashcards
             worker.WorkerReportsProgress = false;
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(LoadKanjiCompleted);
             worker.RunWorkerAsync();
-            e.Complete();
             e.Handled = true;
         }
 
@@ -176,10 +166,9 @@ namespace KanjiFlashcards
                 this.NavigationService.Navigate(new Uri("/KanjiPage.xaml", UriKind.Relative));
         }
 
-        private void ReviewList_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
+        private void ReviewListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             if (isLoading) {
-                e.Complete();
                 e.Handled = true;
                 return;
             }
@@ -194,7 +183,6 @@ namespace KanjiFlashcards
             worker.WorkerReportsProgress = false;
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(LoadKanjiCompleted);
             worker.RunWorkerAsync();
-            e.Complete();
             e.Handled = true;
         }
 
@@ -219,14 +207,13 @@ namespace KanjiFlashcards
             base.OnNavigatedTo(e);
         }
 
-        private void About_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
+        private void AboutListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             this.NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
-            e.Complete();
             e.Handled = true;
         }
 
-        private void FeatureRequest_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
+        private void FeatureRequestListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             var emailComposeTask = new EmailComposeTask {
                 To = "app@stejin.org",
@@ -236,13 +223,11 @@ namespace KanjiFlashcards
             emailComposeTask.Show();
 
             e.Handled = true;
-            e.Complete();
         }
 
-        private void Lookup_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
+        private void LookupListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             this.NavigationService.Navigate(new Uri("/LookupPage.xaml", UriKind.Relative));
-            e.Complete();
             e.Handled = true;
         }
 
@@ -271,6 +256,12 @@ namespace KanjiFlashcards
         private void LoadTodayKanjiAsync(object sender, DoWorkEventArgs e)
         {
             App.KanjiDict.LoadFromDatabase(new List<string>() { App.AppSettings.TodayKanji.Literal });
+        }
+
+        private void SettingsListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
+            e.Handled = true;
         }
 
     }

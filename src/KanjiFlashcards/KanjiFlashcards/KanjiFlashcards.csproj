@@ -107,9 +107,13 @@
     </Compile>
     <Compile Include="PasswordValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReviewListPage.xaml.cs">
+      <DependentUpon>ReviewListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TiltEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -140,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="ReviewListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
@@ -172,8 +180,12 @@
     <Content Include="Images\appbar.questionmark.dark.png" />
     <Content Include="Images\appbar.questionmark.light.png" />
     <Content Include="Images\appbar.save.rest.png" />
+    <Content Include="Images\appbar.transport.back.rest.png" />
+    <Content Include="Images\appbar.transport.ff.rest.png" />
     <Content Include="Images\appbar.transport.play.dark.png" />
     <Content Include="Images\appbar.transport.play.light.png" />
+    <Content Include="Images\appbar.transport.play.rest.png" />
+    <Content Include="Images\appbar.transport.rew.rest.png" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
