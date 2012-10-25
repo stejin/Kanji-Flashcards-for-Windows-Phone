@@ -8,19 +8,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using System.Xml;
-using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Windows.Resources;
-using NeoDatis.Odb;
-using NeoDatis.Odb.Core.Query;
-using NeoDatis.Odb.Impl.Core.Query.Criteria;
 using KanjiDatabase;
-using NeoDatis.Odb.Core.Query.Criteria;
 
 namespace KanjiFlashcards.Core
 {
@@ -30,11 +24,7 @@ namespace KanjiFlashcards.Core
 
         private List<int> sequence;
 
-        private const string baseFilePath = "Data/kanjidic2.neodatis";
-        private const string kanjiDatabaseUri = @"http://test.stejin.org/wp7/files/kanjidic2.neodatis.zip";
-
-        public event EventHandler DatabaseUpdateCompleted;
-        public event EventHandler<DatabaseUpdateErrorEventArgs> DatabaseUpdateError;
+        private const string connectionString = @"Data Source = 'appdata:/Dictionary/KanjiDB.sdf'; File Mode = read only;";
 
         public int KanjiCount
         {
@@ -48,76 +38,38 @@ namespace KanjiFlashcards.Core
 
         public void LoadFromDatabase(JLPT jlptLevels)
         {
-            ODB odb = ODBFactory.Open(baseFilePath);
+            kanjiDictionary = new Dictionary<string, Kanji>();
 
-            try {
+            using (KanjiDataContext context = new KanjiDataContext(connectionString)) {
 
-                kanjiDictionary = new Dictionary<string, Kanji>();
+                var data = from k in context.Kanji where k.JLPTLevel == (jlptLevels & k.JLPTLevel) select k;
 
-                JLPT jlpt1 = JLPT.Undefined;
-                JLPT jlpt2 = JLPT.Undefined;
-                JLPT jlpt3 = JLPT.Undefined;
-                JLPT jlpt4 = JLPT.Undefined;
-                JLPT jlptOther = JLPT.Undefined;
+                data.ToList().ForEach(k => kanjiDictionary.Add(k.Literal, k));
 
-                if ((jlptLevels & JLPT.Level1) == JLPT.Level1)
-                    jlpt1 = JLPT.Level1;
-                    
-                if ((jlptLevels & JLPT.Level2) == JLPT.Level2)
-                    jlpt2 = JLPT.Level2;
-
-                if ((jlptLevels & JLPT.Level3) == JLPT.Level3)
-                    jlpt3 = JLPT.Level3;
-
-                if ((jlptLevels & JLPT.Level4) == JLPT.Level4)
-                    jlpt4 = JLPT.Level4;
-
-                if ((jlptLevels & JLPT.Other) == JLPT.Other)
-                    jlptOther = JLPT.Other;
-
-                IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Or()
-                    .Add(Where.Equal("JLPTLevel", jlpt1.ToString()))
-                    .Add(Where.Equal("JLPTLevel", jlpt2.ToString()))
-                    .Add(Where.Equal("JLPTLevel", jlpt3.ToString()))
-                    .Add(Where.Equal("JLPTLevel", jlpt4.ToString()))
-                    .Add(Where.Equal("JLPTLevel", jlptOther.ToString())));
-                var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
-                data.ToList<KanjiData>().ForEach(k => kanjiDictionary.Add(k.Literal, new Kanji(k)));
                 if (App.AppSettings.IsRandomFlashcards)
                     GenerateRandomSequence();
                 else
                     GenerateSequence();
-            } catch {
-
-            } finally {
-                odb.Close();
             }
+                
         }
 
         public void LoadFromDatabase(List<string> kanjiList)
         {
-            ODB odb = ODBFactory.Open(baseFilePath);
+            kanjiDictionary = new Dictionary<string, Kanji>();
 
-            try {
-                kanjiDictionary = new Dictionary<string, Kanji>();
+            using (KanjiDataContext context = new KanjiDataContext(connectionString)) {
 
-                foreach (string literal in kanjiList) {
-                    IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Equal("Literal", literal));
-                    var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
-                    if (data.GetFirst() != null)
-                        kanjiDictionary.Add(literal, new Kanji(data.GetFirst()));
-                }
+                var data = from k in context.Kanji where kanjiList.Contains(k.Literal) select k;
+
+                kanjiList.ForEach(k => kanjiDictionary.Add(k, data.First(d => d.Literal == k)));
 
                 if (App.AppSettings.IsRandomReviewList)
                     GenerateRandomSequence();
                 else
                     GenerateSequence();
-
-            } catch {
-
-            } finally {
-                odb.Close();
             }
+          
         }
 
         public void SetDictionary(Dictionary<string, Kanji> dictionary)
@@ -128,36 +80,28 @@ namespace KanjiFlashcards.Core
 
         public Kanji GetKanjiFromDatabase(int kanjiId)
         {
-            ODB odb = ODBFactory.Open(baseFilePath);
-            try {
-                IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Equal("Id", kanjiId));
-                var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
-                if (data.GetFirst() != null) {
-                    return new Kanji(data.GetFirst());
-                }
-            } catch {
+            using (KanjiDataContext context = new KanjiDataContext(connectionString)) {
 
-            } finally {
-                odb.Close();
+                var data = from k in context.Kanji where k.Id == kanjiId select k;
+
+                if (data.Count() == 0)
+                    return null;
+
+                return data.First();
             }
-            return null;
         }
 
         public Kanji GetKanjiFromDatabase(string literal)
         {
-            ODB odb = ODBFactory.Open(baseFilePath);
-            try {
-                IQuery query = new CriteriaQuery(typeof(KanjiData), Where.Equal("Literal", literal));
-                var data = odb.GetObjects<KanjiDatabase.KanjiData>(query);
-                if (data.GetFirst() != null) {
-                    return new Kanji(data.GetFirst());
-                }
-            } catch {
+            using (KanjiDataContext context = new KanjiDataContext(connectionString)) {
 
-            } finally {
-                odb.Close();
+                var data = from k in context.Kanji where k.Literal == literal select k;
+
+                if (data.Count() == 0)
+                    return null;
+
+                return data.First();
             }
-            return null;
         }
 
         private void GenerateSequence()
@@ -206,108 +150,9 @@ namespace KanjiFlashcards.Core
                 return 0;
         }
 
-        private void DeployDatabase(Stream source, bool replace = false)
+        public void RemoveKanjiFromDictionary(string literal)
         {
-            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication()) {
-                if (!isf.FileExists(baseFilePath) || replace == true) {
-                    DeleteKanjiDatabase();
-                    BinaryReader fileReader = new BinaryReader(source);
-                    if (GetDirectory(baseFilePath) != string.Empty && !isf.DirectoryExists(GetDirectory(baseFilePath)))
-                        isf.CreateDirectory(GetDirectory(baseFilePath));
-                    IsolatedStorageFileStream outFile = isf.CreateFile(baseFilePath);
-                    bool eof = false;
-                    long fileLength = fileReader.BaseStream.Length;
-                    int writeLength = 512;
-                    while (!eof) {
-                        if (fileLength < 512) {
-                            writeLength = Convert.ToInt32(fileLength);
-                            outFile.Write(fileReader.ReadBytes(writeLength), 0, writeLength);
-                        } else {
-                            outFile.Write(fileReader.ReadBytes(writeLength), 0, writeLength);
-                        }
-                        fileLength = fileLength - 512;
-                        if (fileLength <= 0) eof = true;
-                    }
-                    fileReader.Close();
-                    outFile.Close();
-                }
-            }
-        }
-
-        private void DeleteKanjiDatabase()
-        {
-            if (IsolatedStorageFile.GetUserStoreForApplication().FileExists(baseFilePath))
-                IsolatedStorageFile.GetUserStoreForApplication().DeleteFile(baseFilePath);
-        }
-
-        public void UpdateKanjiDatatabaseFromXap()
-        {
-            DeployDatabase(GetFileStream("Dictionary/kanjidic2.neodatis"), true);
-        }
-
-        public void UpdateKanjiDatatabaseFromInternet()
-        {
-            WebClient client = new WebClient();
-            client.OpenReadCompleted += new OpenReadCompletedEventHandler(DatabaseDownloadCompleted);
-            client.OpenReadAsync(new Uri(kanjiDatabaseUri));
-        }
-
-        private void DatabaseDownloadCompleted(object sender, OpenReadCompletedEventArgs args)
-        {
-            try {
-                DeployDatabase(GetUncompressedStream(args.Result), true);
-                EventHandler handler = DatabaseUpdateCompleted;
-                if (handler != null)
-                    handler(this, new EventArgs());
-            } catch (Exception e) {
-                var handler = DatabaseUpdateError;
-                if (handler != null) {
-                    handler(this, new DatabaseUpdateErrorEventArgs() { ErrorMessage = e.Message });
-                }
-            }
-        }
-
-        public bool KanjiDatabaseExists()
-        {
-            return IsolatedStorageFile.GetUserStoreForApplication().FileExists(baseFilePath);
-        }
-
-        private Stream GetFileStream(string filename)
-        {
-            Uri fileUri = new Uri(filename, UriKind.Relative);
-            StreamResourceInfo stream = System.Windows.Application.GetResourceStream(fileUri);
-
-            if (stream != null) {
-                return stream.Stream;
-            }
-            return null;
-        }
-
-        private Stream GetUncompressedStream(Stream source)
-        {
-            Uri fileUri = new Uri(GetFileName(baseFilePath), UriKind.Relative);
-            StreamResourceInfo stream = System.Windows.Application.GetResourceStream(new StreamResourceInfo(source, "zip"), fileUri);
-
-            if (stream != null) {
-                return stream.Stream;
-            }
-            return null;
-        }
-
-        public String GetDirectory(string fileName)
-        {
-            if (fileName.Contains("/"))
-                return fileName.Substring(0, fileName.LastIndexOf('/'));
-            else
-                return string.Empty;
-        }
-
-        public String GetFileName(string fileName)
-        {
-            if (fileName.Contains("/"))
-                return fileName.Substring(fileName.LastIndexOf('/') + 1);
-            else
-                return fileName;
+            kanjiDictionary.Remove(literal);
         }
 
     }

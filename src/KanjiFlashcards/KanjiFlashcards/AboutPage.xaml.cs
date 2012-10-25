@@ -22,13 +22,6 @@ namespace KanjiFlashcards
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-        {
-            DatabaseVersion.Text = String.Format(DatabaseVersion.Tag.ToString(), App.AppSettings.DatabaseVersion);
-
-            base.OnNavigatedTo(e);
-        }
-
         private void TextBlock_ManipulationStarted(object sender, ManipulationStartedEventArgs e)
         {
             var emailComposeTask = new EmailComposeTask {

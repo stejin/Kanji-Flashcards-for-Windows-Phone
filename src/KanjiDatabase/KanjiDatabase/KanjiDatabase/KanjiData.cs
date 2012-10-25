@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace KanjiDatabase
 {
@@ -18,6 +21,8 @@ namespace KanjiDatabase
         public JLPT JLPTLevel;
 
         public int StrokeCount;
+
+        public MemoryStream Image;
 
     }
 }

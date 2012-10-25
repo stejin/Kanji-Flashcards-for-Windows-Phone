@@ -27,32 +27,48 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel>
-                <TextBlock Text="Kanji are sourced from Jim Breen's" TextWrapping="Wrap" />
-                <HyperlinkButton TargetName="_blank" NavigateUri="http://www.csse.monash.edu.au/~jwb/kanjidic2/index.html" Content="KANJIDIC2 file" HorizontalAlignment="Left" FontSize="20" />
-                <TextBlock Text=" " />
-                <TextBlock Text="Instructions" TextDecorations="Underline" />
-                <TextBlock Text="Move your finger from right to left accross the screen to advance to the next kanji and from left to right to return to the previous flashcard.  Tap the screen to reveal the full flashcard." TextWrapping="Wrap" />
-                <TextBlock Text=" " />
-                <TextBlock x:Name="Version" Text="Version: 1.5" />
-                <TextBlock Text=" " />
-                <TextBlock x:Name="DatabaseVersion" Text="Database Revision: 0" Tag="Database Revision: {0}" />
-                <TextBlock Text=" " />
-                <TextBlock Text="For more information please visit" />
-                <HyperlinkButton TargetName="_blank" NavigateUri="http://app.stejin.org/wp7/KanjiFlashcards" Content="http://app.stejin.org/wp7/KanjiFlashcards" HorizontalAlignment="Left" FontSize="20" />
-                <TextBlock Text=" " />
-                <TextBlock Text="© Steffen Lehmann 2011" />
-                <TextBlock Text="Questions or suggestions? Email me at " />
-                <TextBlock Text="app@stejin.org" TextDecorations="Underline" Margin="12,0,0,0" IsHitTestVisible="True" ManipulationStarted="TextBlock_ManipulationStarted" />
-            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Visible">
+                <ScrollViewer.Projection>
+                    <PlaneProjection/>
+                </ScrollViewer.Projection>
+                <StackPanel>
+                    <Image Source="/Images/Misc/Tile200x200.png"  Width="200" Height="200" HorizontalAlignment="Left" Margin="0,0,0,10" />
+                    <TextBlock Text="Kanji Flashcards for Windows Phone" />
+                    <TextBlock Text=" " />
+                    <TextBlock x:Name="Version" Text="Version: 2.0" />
+                    <TextBlock Text=" " />
+                    <TextBlock x:Name="DatabaseVersion" Text="Database Revision: 3" />
+                    <TextBlock Text=" " />
+                    <TextBlock Text="Kanji are sourced from Jim Breen's" TextWrapping="Wrap" />
+                    <HyperlinkButton TargetName="_blank" NavigateUri="http://www.csse.monash.edu.au/~jwb/kanjidic2/index.html" Content="KANJIDIC2 file" HorizontalAlignment="Left" FontSize="20" />
+                    <TextBlock Text=" " />
+                    <TextBlock Text="For more information please visit" />
+                    <HyperlinkButton TargetName="_blank" NavigateUri="http://app.stejin.org/wp7/KanjiFlashcards" Content="http://app.stejin.org/wp7/KanjiFlashcards" HorizontalAlignment="Left" FontSize="20" />
+                    <TextBlock Text=" " />
+                    <TextBlock Text="© Steffen Lehmann 2012" />
+                    <TextBlock Text="Questions or suggestions? Email me at " />
+                    <TextBlock Text="app@stejin.org" TextDecorations="Underline" Margin="12,0,0,0" IsHitTestVisible="True" ManipulationStarted="TextBlock_ManipulationStarted" />
+                    <TextBlock Text=" " />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70" />
+                            <ColumnDefinition Width="390" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" Text="Like this app? We accept donations in Bitcoin." VerticalAlignment="Top" TextWrapping="Wrap" />
+                        <Image Grid.Column="0" Source="/Images/Misc/logo_small.png" Width="57" Height="60" />
+                    </Grid>
+                    <Image Source="/Images/Misc/BitcoinQR.png" Width="256" Height="256"  HorizontalAlignment="Left" Margin="0,10" />
+                    <TextBlock Text="1B8vVbRaSdo6E8wHws3hRwopWdGyxj8mGi" />
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/Icons/appbar_button1.png" Text="Button 1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/Icons/appbar_button2.png" Text="Button 2"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
                 <shell:ApplicationBarMenuItem Text="MenuItem 2"/>

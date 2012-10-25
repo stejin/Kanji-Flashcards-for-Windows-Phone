@@ -25,8 +25,10 @@ namespace GenerateKanjiImages
             var kanjiList = DataGateway.Instance.GetAllKanji();
             foreach (var kanji in kanjiList) {
                 var kanjiImage = CreateBitmapImage(kanji.Literal);
-                kanjiImage.Save(String.Format(@"C:\Users\Steffen\Documents\Projects\KanjiDatabase\KanjiImages\{0}.png", kanji.ToString()), ImageFormat.Png);
+                kanjiImage.Save(String.Format(@"C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiImages\{0}.png", kanji.Id.ToString()), ImageFormat.Png);
                 Console.WriteLine("{0}.png generated.", kanji.Id.ToString());
+                //if (kanji.Id == 100)
+                //    return;
             }
             Console.WriteLine("Done!");
             Console.ReadKey();
@@ -36,10 +38,22 @@ namespace GenerateKanjiImages
         {
             Bitmap bmpImage = new Bitmap(1, 1);
 
+            // Online
+            //int width = 173;
+            //int height = 173;
+            //int x = 39;
+            //int y = 47;
+            //int fontSize = 67;
+
+            // Phone
             int width = 173;
             int height = 173;
+            int x = 0;
+            int y = 21;
+            int fontSize = 120;
+
             // Create the Font object for the image text drawing.   
-            Font font = new Font("Calibri", 67, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            Font font = new Font("Calibri", fontSize, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
 
             // Create a graphics object to measure the text's width and height.  
             Graphics graphics = Graphics.FromImage(bmpImage);
@@ -54,10 +68,10 @@ namespace GenerateKanjiImages
             graphics = Graphics.FromImage(bmpImage);
 
             // Set Background color  
-            graphics.Clear(Color.FromArgb(70, 70, 70));
+            graphics.Clear(Color.FromArgb(0, 70, 70, 70));
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
             graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-            graphics.DrawString(kanji, font, new SolidBrush(Color.White), 39, 47);
+            graphics.DrawString(kanji, font, new SolidBrush(Color.White), x, y);
             graphics.Flush();
 
             return (bmpImage);

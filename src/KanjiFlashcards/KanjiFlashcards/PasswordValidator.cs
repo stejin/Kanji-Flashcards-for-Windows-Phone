@@ -9,8 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Net.NetworkInformation;
-using KanjiFlashcards.ServiceContracts.Operations;
 using System.Xml.Serialization;
+using KanjiFlashcards.ServiceContracts.Operations;
 
 namespace KanjiFlashcards
 {

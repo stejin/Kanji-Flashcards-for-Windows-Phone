@@ -17,7 +17,7 @@ namespace KanjiFlashcards.Core
 {
     public class ReviewList
     {
-        public List<string> KanjiList { get; set; }
+        public List<KanjiList> KanjiLists { get; set; }
 
         public void Save()
         {
@@ -32,25 +32,25 @@ namespace KanjiFlashcards.Core
 
         public static ReviewList Load()
         {
-            ReviewList kanjiList;
+            ReviewList reviewList;
             IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
             if (iso.FileExists("ReviewList.xml")) {
                 IsolatedStorageFileStream stream = iso.OpenFile("ReviewList.xml", FileMode.Open);
                 StreamReader reader = new StreamReader(stream);
                 try {
-                    XmlSerializer ser = new XmlSerializer(typeof(ReviewList)); kanjiList = ser.Deserialize(reader) as ReviewList;
+                    XmlSerializer ser = new XmlSerializer(typeof(ReviewList)); reviewList = ser.Deserialize(reader) as ReviewList;
                 } catch (Exception ex) {
-                    kanjiList = new ReviewList();
-                    kanjiList.KanjiList = new List<string>();
+                    reviewList = new ReviewList();
+                    reviewList.KanjiLists = new List<KanjiList>();
                 } finally {
                     reader.Close();
                 }
             } else {
-                kanjiList = new ReviewList();
-                kanjiList.KanjiList = new List<string>();
+                reviewList = new ReviewList();
+                reviewList.KanjiLists = new List<KanjiList>();
             }
             iso.Dispose();
-            return kanjiList;
+            return reviewList;
         }
     }
 }

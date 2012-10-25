@@ -1,18 +1,20 @@
-﻿namespace KanjiFlashcards.Core
-{
-    public enum JLPT
-    {
-        Undefined = 1,
-        Level1 = 2,
-        Level2 = 4,
-        Level3 = 8,
-        Level4 = 16,
-        Other = 32,
-    }
+﻿using System;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Ink;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 
+namespace KanjiFlashcards.Core
+{
     public enum Mode
     {
         Flashcards,
         Review,
+        Lookup,
     }
 }

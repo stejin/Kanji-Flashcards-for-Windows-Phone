@@ -14,7 +14,6 @@ using KanjiFlashcards.Core;
 using System.ComponentModel;
 using Microsoft.Phone.Net.NetworkInformation;
 using System.Windows.Media.Imaging;
-using KanjiFlashcards.ServiceContracts.Operations;
 using System.Xml.Serialization;
 using Microsoft.Phone.Tasks;
 
@@ -22,7 +21,6 @@ namespace KanjiFlashcards
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private int latestVersion;
         private bool isLoading = false;
 
         // Constructor
@@ -43,67 +41,18 @@ namespace KanjiFlashcards
 
             if (NetworkInterface.GetIsNetworkAvailable()) {
 
-                WebClient client1 = new WebClient();
-                client1.OpenReadCompleted += new OpenReadCompletedEventHandler(CheckDatabaseVersion);
-                client1.OpenReadAsync(new Uri(App.BaseUrl + "/KanjiDatabaseCurrentVersion"));
                 WebClient client2 = new WebClient();
                 client2.OpenReadCompleted += new OpenReadCompletedEventHandler(UpdateTodayKanji);
                 client2.OpenReadAsync(new Uri(App.BaseUrl + "/KanjiForToday?" + App.AppSettings.JLPTLevels));
 
-            } else if (!App.KanjiDict.KanjiDatabaseExists()) {
-                MessageBox.Show("Local kanji database not found and no data connection available. Please connect to the internet to download the database.");
             } 
-        }
-
-        private void CheckDatabaseVersion(object sender, OpenReadCompletedEventArgs args)
-        {
-            try {
-                var serializer = new XmlSerializer(typeof(KanjiDatabaseCurrentVersionResponse));
-                KanjiDatabaseCurrentVersionResponse response = serializer.Deserialize(args.Result) as KanjiDatabaseCurrentVersionResponse;
-
-                latestVersion = response.Version;
-                int currentVersion = App.AppSettings.DatabaseVersion;
-                if (currentVersion < latestVersion) {
-                    MessageBox.Show("Kanji database is out-of-date.  Click OK to download the latest version.");
-                    App.KanjiDict.DatabaseUpdateCompleted += DatabaseUpdateCompleted;
-                    App.KanjiDict.DatabaseUpdateError += DatabaseUpdateFailed;
-                    progressBar.Visibility = System.Windows.Visibility.Visible;
-                    isLoading = true;
-                    App.KanjiDict.UpdateKanjiDatatabaseFromInternet();
-                }
-            } catch { }
-        }
-
-        private void DatabaseUpdateCompleted(object sender, EventArgs args)
-        {
-            App.KanjiDict.DatabaseUpdateCompleted -= DatabaseUpdateCompleted;
-            App.KanjiDict.DatabaseUpdateError -= DatabaseUpdateFailed;
-
-            App.AppSettings.DatabaseVersion = latestVersion;
-
-            progressBar.Visibility = System.Windows.Visibility.Collapsed;
-
-            MessageBox.Show(String.Format("Database successfully updated to version {0}.", latestVersion));
-            isLoading = false;
-        }
-
-
-        private void DatabaseUpdateFailed(object sender, DatabaseUpdateErrorEventArgs args)
-        {
-            App.KanjiDict.DatabaseUpdateCompleted -= DatabaseUpdateCompleted;
-            App.KanjiDict.DatabaseUpdateError -= DatabaseUpdateFailed;
-
-            progressBar.Visibility = System.Windows.Visibility.Collapsed;
-
-            MessageBox.Show(String.Format("Database update failed with error: {0}.", args.ErrorMessage));
-            isLoading = false;
         }
 
         private void UpdateTodayKanji(object sender, OpenReadCompletedEventArgs args)
         {
             try {
-                var serializer = new XmlSerializer(typeof(KanjiForTodayResponse));
-                KanjiForTodayResponse response = serializer.Deserialize(args.Result) as KanjiForTodayResponse;
+                var serializer = new XmlSerializer(typeof(KanjiFlashcards.ServiceContracts.Operations.KanjiForTodayResponse));
+                KanjiFlashcards.ServiceContracts.Operations.KanjiForTodayResponse response = serializer.Deserialize(args.Result) as KanjiFlashcards.ServiceContracts.Operations.KanjiForTodayResponse;
 
                 App.AppSettings.TodayKanji = response.Kanji;
                 UpdateTodayKanji(App.AppSettings.TodayKanji);
@@ -115,11 +64,12 @@ namespace KanjiFlashcards
             if (kanji.Literal == null || kanji.Literal == String.Empty)
                 return;
 
-            TodayKanjiText.Text = kanji.Literal;
+            //TodayKanjiText.Text = kanji.Literal;
+            TodayKanjiImage.Source = new BitmapImage(new Uri(String.Format("/Images/Kanji/{0}.png", kanji.Id), UriKind.Relative));
 
             System.Text.StringBuilder text = new System.Text.StringBuilder();
             text.Append(TodayKanjiDetails.Tag.ToString());
-            text.Append(Environment.NewLine).Append(Environment.NewLine);
+            text.Append(Environment.NewLine);
             text.Append(kanji.OnYomi);
             text.Append(Environment.NewLine);
             text.Append(kanji.KunYomi);
@@ -140,7 +90,7 @@ namespace KanjiFlashcards
             progressBar.Visibility = System.Windows.Visibility.Visible;
 
             App.KanjiMode = Mode.Flashcards;
-            
+
             var worker = new BackgroundWorker();
             worker.DoWork += new DoWorkEventHandler(LoadKanjiAsync);
             worker.WorkerReportsProgress = false;
@@ -154,41 +104,10 @@ namespace KanjiFlashcards
             App.KanjiDict.LoadFromDatabase(App.AppSettings.GetJLPTLevels());
         }
 
-        private void LoadKanjiCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            isLoading = false;
-
-            progressBar.Visibility = System.Windows.Visibility.Collapsed;
-            
-            if (App.KanjiDict.KanjiCount == 0)
-                MessageBox.Show("No kanji found.");
-            else
-                this.NavigationService.Navigate(new Uri("/KanjiPage.xaml", UriKind.Relative));
-        }
-
         private void ReviewListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (isLoading) {
-                e.Handled = true;
-                return;
-            }
-            isLoading = true;
-
-            progressBar.Visibility = System.Windows.Visibility.Visible;
-
-            App.KanjiMode = Mode.Review;
-
-            var worker = new BackgroundWorker();
-            worker.DoWork += new DoWorkEventHandler(LoadReviewListAsync);
-            worker.WorkerReportsProgress = false;
-            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(LoadKanjiCompleted);
-            worker.RunWorkerAsync();
+            this.NavigationService.Navigate(new Uri("/Views/ReviewListView.xaml?mode=load", UriKind.Relative));
             e.Handled = true;
-        }
-
-        private void LoadReviewListAsync(object sender, DoWorkEventArgs e)
-        {
-            App.KanjiDict.LoadFromDatabase(App.ReviewList.KanjiList);
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
@@ -227,7 +146,7 @@ namespace KanjiFlashcards
 
         private void LookupListBoxItem_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            this.NavigationService.Navigate(new Uri("/LookupPage.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new Uri("/Views/LookupView.xaml", UriKind.Relative));
             e.Handled = true;
         }
 
@@ -262,6 +181,18 @@ namespace KanjiFlashcards
         {
             this.NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative));
             e.Handled = true;
+        }
+
+        private void LoadKanjiCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            isLoading = false;
+
+            progressBar.Visibility = System.Windows.Visibility.Collapsed;
+
+            if (App.KanjiDict.KanjiCount == 0)
+                MessageBox.Show("No kanji found.");
+            else
+                this.NavigationService.Navigate(new Uri("/Views/KanjiView.xaml", UriKind.Relative));
         }
 
     }

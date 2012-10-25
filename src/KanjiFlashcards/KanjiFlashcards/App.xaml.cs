@@ -15,6 +15,7 @@ using Microsoft.Phone.Shell;
 using KanjiFlashcards.Core;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Net.NetworkInformation;
+using KanjiDatabase;
 
 namespace KanjiFlashcards
 {
@@ -41,11 +42,13 @@ namespace KanjiFlashcards
             }
         }
 
-        public static bool IsResumeKanji { get; private set; }
+        public static bool IsResumeKanji { get; set; }
 
         public static Mode KanjiMode { get; set; }
 
-        public static string CurrentKanji = string.Empty;
+        public static Kanji CurrentKanji;
+
+        public static KanjiList CurrentReviewList;
 
         public static KanjiDictionary KanjiDict { get; private set; }
 
@@ -61,6 +64,8 @@ namespace KanjiFlashcards
                 return reviewList;
             }
         }
+
+        public static List<string> LookupKanji { get; set; }
 
         // Constructor
         public App()
@@ -121,17 +126,28 @@ namespace KanjiFlashcards
         {
             var settingsStorage = IsolatedStorageSettings.ApplicationSettings;
             if (settingsStorage.Contains("LastViewedKanji") && settingsStorage["LastViewedKanji"].ToString() != string.Empty) {
-                CurrentKanji = settingsStorage["LastViewedKanji"].ToString();
+                CurrentKanji = App.KanjiDict.GetKanjiFromDatabase(settingsStorage["LastViewedKanji"].ToString());
                 if (settingsStorage.Contains("KanjiMode")) 
                     KanjiMode = (Mode)settingsStorage["KanjiMode"];
                 else
                     KanjiMode = Mode.Flashcards;
                 switch (KanjiMode) {
                     case Mode.Flashcards:
-                        App.KanjiDict.LoadFromDatabase(App.AppSettings.GetJLPTLevels());
+                        KanjiDict.LoadFromDatabase(AppSettings.GetJLPTLevels());
                         break;
                     case Mode.Review:
-                        App.KanjiDict.LoadFromDatabase(App.ReviewList.KanjiList);
+                        if (settingsStorage.Contains("ReviewList")) {
+                            var result = ReviewList.KanjiLists.Where(k => k.Name == settingsStorage["ReviewList"].ToString());
+                            if (result.Count() > 0) {
+                                CurrentReviewList = result.First();
+                                KanjiDict.LoadFromDatabase(CurrentReviewList.Kanji);
+                            }
+                        }
+                        break;
+                    case Mode.Lookup:
+                        if (settingsStorage.Contains("LookupKanji")) {
+                            KanjiDict.LoadFromDatabase(settingsStorage["LookupKanji"] as List<string>);
+                        }
                         break;
                 }
                 IsResumeKanji = true;
@@ -144,16 +160,31 @@ namespace KanjiFlashcards
         // This code will not execute when the application is closing
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
+            ReviewList.Save();
             AppSettings.Save();
             var settingsStorage = IsolatedStorageSettings.ApplicationSettings;
-            if (settingsStorage.Contains("LastViewedKanji"))
-                settingsStorage["LastViewedKanji"] = CurrentKanji;
-            else
-                settingsStorage.Add("LastViewedKanji", CurrentKanji);
+            if (CurrentKanji != null) {
+                if (settingsStorage.Contains("LastViewedKanji"))
+                    settingsStorage["LastViewedKanji"] = CurrentKanji.Literal;
+                else
+                    settingsStorage.Add("LastViewedKanji", CurrentKanji.Literal);
+            }
             if (settingsStorage.Contains("KanjiMode"))
                 settingsStorage["KanjiMode"] = KanjiMode;
             else
                 settingsStorage.Add("KanjiMode", KanjiMode);
+            if (CurrentReviewList != null) {
+                if (settingsStorage.Contains("ReviewList"))
+                    settingsStorage["ReviewList"] = CurrentReviewList.Name;
+                else
+                    settingsStorage.Add("ReviewList", CurrentReviewList.Name);
+            }
+            if (LookupKanji != null) {
+                if (settingsStorage.Contains("LookupKanji"))
+                    settingsStorage["LookupKanji"] = LookupKanji;
+                else
+                    settingsStorage.Add("LookupKanji", LookupKanji);
+            }
             settingsStorage.Save();
         }
 
@@ -161,6 +192,7 @@ namespace KanjiFlashcards
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
+            ReviewList.Save();
             AppSettings.Save();
         }
 

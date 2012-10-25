@@ -7,53 +7,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:KanjiFlashcards"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"    
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True" xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    shell:SystemTray.IsVisible="True" 
     local:TiltEffect.IsTiltEnabled="True" >
            
-    <phone:PhoneApplicationPage.Resources>
    
-    	<Style x:Key="ListBoxItemStyleWithoutHighlight" TargetType="ListBoxItem">
-    		<Setter Property="Background" Value="Transparent"/>
-    		<Setter Property="BorderThickness" Value="0"/>
-    		<Setter Property="BorderBrush" Value="Transparent"/>
-    		<Setter Property="Padding" Value="0"/>
-    		<Setter Property="HorizontalContentAlignment" Value="Left"/>
-    		<Setter Property="VerticalContentAlignment" Value="Top"/>
-    		<Setter Property="Template">
-    			<Setter.Value>
-    				<ControlTemplate TargetType="ListBoxItem">
-    					<Border x:Name="LayoutRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
-    						<VisualStateManager.VisualStateGroups>
-    							<VisualStateGroup x:Name="CommonStates">
-    								<VisualState x:Name="Normal"/>
-    								<VisualState x:Name="MouseOver"/>
-    								<VisualState x:Name="Disabled">
-    									<Storyboard>
-    										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="LayoutRoot">
-    											<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource TransparentBrush}"/>
-    										</ObjectAnimationUsingKeyFrames>
-    										<DoubleAnimation Duration="0" To=".5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ContentContainer"/>
-    									</Storyboard>
-    								</VisualState>
-    							</VisualStateGroup>
-    							<VisualStateGroup x:Name="SelectionStates">
-    								<VisualState x:Name="Unselected"/>
-    								<VisualState x:Name="Selected" />
-    							</VisualStateGroup>
-    						</VisualStateManager.VisualStateGroups>
-    						<ContentControl x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-    					</Border>
-    				</ControlTemplate>
-    			</Setter.Value>
-    		</Setter>
-    	</Style>
-   
-    </phone:PhoneApplicationPage.Resources>
     
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -69,7 +32,7 @@
            <!-- <TextBlock x:Name="PageTitle" Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/> -->
         </StackPanel>
         
-        <Grid x:Name="TodayKanji" Grid.Row="1" ShowGridLines="False" Background="{StaticResource PhoneAccentBrush}" Margin="0,10,0,0" ManipulationStarted="TodayKanji_ManipulationStarted">
+        <Grid x:Name="TodayKanji" Grid.Row="1" ShowGridLines="False" Background="{StaticResource PhoneAccentBrush}" Margin="0,0,0,0" ManipulationStarted="TodayKanji_ManipulationStarted">
             <Grid.RowDefinitions>
                 <RowDefinition Height="173" />
             </Grid.RowDefinitions>
@@ -77,14 +40,15 @@
                 <ColumnDefinition Width="173" />
                 <ColumnDefinition Width="307" />
             </Grid.ColumnDefinitions>
-            <TextBlock Name="TodayKanjiText" Text="漢" FontSize="100" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" FontFamily="Yu Gothic" Height="165" TextAlignment="Center" />
-            <TextBlock Name="TodayKanjiDetails" Text="Today's Kanji" Foreground="White" LineStackingStrategy="BlockLineHeight" LineHeight="30" Grid.Column="1" Grid.Row="0" FontSize="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Tag="Today's Kanji" FontFamily="Yu Gothic" />
+            <Image x:Name="TodayKanjiImage" Grid.Column="0" Grid.Row="0" />
+            <!--TextBlock Name="TodayKanjiText" Text="漢" FontSize="100" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Height="165" TextAlignment="Center" /-->
+            <TextBlock Name="TodayKanjiDetails" Text="Today's Kanji" Foreground="White" Grid.Column="1" Grid.Row="0" FontSize="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Tag="Today's Kanji" />
         </Grid>
         
         <!--ContentPanel - place additional content here-->
         <StackPanel Grid.Row="2" Margin="12,22,12,0">
-            <ListBox ItemContainerStyle="{StaticResource ListBoxItemStyleWithoutHighlight}">
-                <ListBoxItem x:Name="FlashcardsListBoxItem" Tap="FlashcardsListBoxItem_Tap">
+            <ListBox ItemContainerStyle="{StaticResource ListBoxItemStyleWithoutHighlight}" Height="500">
+                <ListBoxItem x:Name="FlashcardsListBoxItem" Tap="FlashcardsListBoxItem_Tap" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="80" />
@@ -93,8 +57,8 @@
                             <ColumnDefinition Width="69*" />
                             <ColumnDefinition Width="387*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="PlayIcon" Source="/Images/appbar.transport.play.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
-                        <TextBlock Name="Flashcards" Text="Flashcards" FontSize="46" Grid.Column="1" VerticalAlignment="Center"/>
+                        <Image x:Name="PlayIcon" Source="/Images/Icons/appbar.transport.play.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
+                        <TextBlock Name="Flashcards" Text="Flashcards" FontSize="46" Grid.Column="1" VerticalAlignment="Center" />
                     </Grid>
                 </ListBoxItem>
                 <ListBoxItem x:Name="ReviewListBoxItem" Tap="ReviewListBoxItem_Tap">
@@ -106,7 +70,7 @@
                             <ColumnDefinition Width="69*" />
                             <ColumnDefinition Width="387*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="ReviewIcon" Source="/Images/appbar.favs.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
+                        <Image x:Name="ReviewIcon" Source="/Images/Icons/appbar.favs.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
                         <TextBlock Name="Review" Text="Review" FontSize="46" Grid.Column="1" VerticalAlignment="Center"/>
                     </Grid>
                 </ListBoxItem>
@@ -119,7 +83,7 @@
                             <ColumnDefinition Width="69*" />
                             <ColumnDefinition Width="387*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="LookupIcon" Source="/Images/appbar.feature.search.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
+                        <Image x:Name="LookupIcon" Source="/Images/Icons/appbar.feature.search.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
                         <TextBlock Name="Lookup" Text="Lookup" Grid.Column="1" FontSize="46" VerticalAlignment="Center"/>
                     </Grid>
                 </ListBoxItem>
@@ -132,7 +96,7 @@
                             <ColumnDefinition Width="69*" />
                             <ColumnDefinition Width="387*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="SettingsIcon" Source="/Images/appbar.feature.settings.dark.png" Grid.Column="0" VerticalAlignment="Center" />
+                        <Image x:Name="SettingsIcon" Source="/Images/Icons/appbar.feature.settings.dark.png" Grid.Column="0" VerticalAlignment="Center" />
                         <TextBlock Name="Settings" Text="Settings" Grid.Column="1" FontSize="46" VerticalAlignment="Center" />
                     </Grid>
                 </ListBoxItem>
@@ -145,7 +109,7 @@
                             <ColumnDefinition Width="69*" />
                             <ColumnDefinition Width="387*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="AboutIcon" Source="/Images/appbar.questionmark.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
+                        <Image x:Name="AboutIcon" Source="/Images/Icons/appbar.questionmark.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
                         <TextBlock Name="About" Text="About" Grid.Column="1" FontSize="46" VerticalAlignment="Center"/>
                     </Grid>
                 </ListBoxItem>
@@ -158,7 +122,7 @@
                             <ColumnDefinition Width="69*" />
                             <ColumnDefinition Width="387*" />
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="EmailIcon" Source="/Images/appbar.feature.email.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
+                        <Image x:Name="EmailIcon" Source="/Images/Icons/appbar.feature.email.dark.png" Grid.Column="0" VerticalAlignment="Center"/>
                         <TextBlock Name="Feature" Text="Feature request" Grid.Column="1" FontSize="46" VerticalAlignment="Center"/>
                     </Grid>
                 </ListBoxItem>
@@ -170,8 +134,8 @@
     <!--Sample code showing usage of ApplicationBar-->
     <!--phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.save.rest.png" Text="Save"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" Text="Cancel"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/Icons/appbar.save.rest.png" Text="Save"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/Icons/appbar.cancel.rest.png" Text="Cancel"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
                 <shell:ApplicationBarMenuItem Text="MenuItem 2"/>

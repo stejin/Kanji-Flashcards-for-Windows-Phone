@@ -9,10 +9,5 @@
         Level4 = 16,
         Other = 32,
     }
-
-    public enum Mode
-    {
-        Flashcards,
-        Review,
-    }
+    
 }

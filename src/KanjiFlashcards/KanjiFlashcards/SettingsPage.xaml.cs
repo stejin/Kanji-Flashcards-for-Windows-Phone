@@ -13,10 +13,8 @@ using Microsoft.Phone.Controls;
 using KanjiFlashcards.Core;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Net.NetworkInformation;
-using KanjiFlashcards.ServiceContracts.Operations;
 using System.IO;
-using System.Xml.Linq;
-using System.Xml.Serialization;
+using KanjiDatabase;
 
 namespace KanjiFlashcards
 {
@@ -111,65 +109,6 @@ namespace KanjiFlashcards
             ((PhoneApplicationFrame)App.Current.RootVisual).Style = null;
             EnterStoryboard.Begin();
             base.OnNavigatedTo(e);
-        }
-
-        private void RefreshDatabase_Click(object sender, RoutedEventArgs e)
-        {
-            if (NetworkInterface.GetIsNetworkAvailable()) {
-                if (isLoading)
-                    return;
-                isLoading = true;
-
-                WebClient client = new WebClient();
-                client.OpenReadCompleted += new OpenReadCompletedEventHandler(UpdateDatabaseVersion);
-                client.OpenReadAsync(new Uri(App.BaseUrl + "/KanjiDatabaseCurrentVersion"));
-
-            } else {
-                MessageBox.Show("No data connection available! Please connect to the internet to update the database.");
-            }
-        }
-
-
-        private void UpdateDatabaseVersion(object sender, OpenReadCompletedEventArgs args)
-        {
-            try {
-                var serializer = new XmlSerializer(typeof(KanjiDatabaseCurrentVersionResponse));
-                KanjiDatabaseCurrentVersionResponse response = serializer.Deserialize(args.Result) as KanjiDatabaseCurrentVersionResponse;
-
-                latestVersion = response.Version;
-
-                App.KanjiDict.DatabaseUpdateCompleted += DatabaseUpdateCompleted;
-                App.KanjiDict.DatabaseUpdateError += DatabaseUpdateFailed;
-                progressBar.Visibility = System.Windows.Visibility.Visible;
-
-                App.KanjiDict.UpdateKanjiDatatabaseFromInternet();
-            } catch { }
-        }
-
-        private void DatabaseUpdateCompleted(object sender, EventArgs args)
-        {
-            App.KanjiDict.DatabaseUpdateCompleted -= DatabaseUpdateCompleted;
-            App.KanjiDict.DatabaseUpdateError -= DatabaseUpdateFailed;
-
-            App.AppSettings.DatabaseVersion = latestVersion;
-
-            progressBar.Visibility = System.Windows.Visibility.Collapsed;
-
-            isLoading = false;
-
-            MessageBox.Show(String.Format("Database successfully updated to version {0}.", latestVersion));
-        }
-
-        private void DatabaseUpdateFailed(object sender, DatabaseUpdateErrorEventArgs args)
-        {
-            App.KanjiDict.DatabaseUpdateCompleted -= DatabaseUpdateCompleted;
-            App.KanjiDict.DatabaseUpdateError -= DatabaseUpdateFailed;
-
-            progressBar.Visibility = System.Windows.Visibility.Collapsed;
-
-            isLoading = false;
-
-            MessageBox.Show(String.Format("Database update failed with error: {0}.", args.ErrorMessage));
         }
 
         private void ApplicationBarMenuItem_Click(object sender, EventArgs e)

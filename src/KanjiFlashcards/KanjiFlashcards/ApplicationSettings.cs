@@ -12,6 +12,7 @@ using KanjiFlashcards.Core;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Xml.Serialization;
+using KanjiDatabase;
 
 namespace KanjiFlashcards
 {
@@ -26,8 +27,6 @@ namespace KanjiFlashcards
         public bool IsRandomFlashcards { get; set; }
         
         public bool IsRandomReviewList { get; set; }
-
-        public int DatabaseVersion { get; set; }
 
         public KanjiFlashcards.ServiceContracts.Types.KanjiMessage TodayKanji { get; set; }
 
@@ -79,9 +78,8 @@ namespace KanjiFlashcards
                 } catch (Exception ex) {
                     settings = new ApplicationSettings();
                     settings.SetJLPTLevels(JLPT.Level2 | JLPT.Level3 | JLPT.Level4);
-                    settings.IsRandomFlashcards = true;
-                    settings.IsRandomReviewList = true;
-                    settings.DatabaseVersion = 0;
+                    settings.IsRandomFlashcards = false;
+                    settings.IsRandomReviewList = false;
                     settings.DeveloperPassword = "";
                     settings.IsExperimentalFunctionalityEnabled = false;
                 } finally {
@@ -90,9 +88,8 @@ namespace KanjiFlashcards
             } else {
                 settings = new ApplicationSettings();
                 settings.SetJLPTLevels(JLPT.Level2 | JLPT.Level3 | JLPT.Level4);
-                settings.IsRandomFlashcards = true;
-                settings.IsRandomReviewList = true;
-                settings.DatabaseVersion = 0;
+                settings.IsRandomFlashcards = false;
+                settings.IsRandomReviewList = false;
                 settings.DeveloperPassword = "";
                 settings.IsExperimentalFunctionalityEnabled = false;
             }

@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using NeoDatis.Odb;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
+using System.Windows.Media.Imaging;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace KanjiDatabase
 {
@@ -17,7 +23,7 @@ namespace KanjiDatabase
             //  CopyToDatabase();
             GenerateDatabase(@"C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\kanjidic2.neodatis");
             TestDatabase(@"C:\Users\Steffen\Documents\GitHub\Kanji-Flashcards-for-Windows-Phone\src\KanjiDatabase\kanjidic2.neodatis");
-            // TestDatabase2();
+     //       TestDatabase2();
         }
 
         private static void GenerateDatabase(string databaseName)
@@ -28,7 +34,11 @@ namespace KanjiDatabase
             Console.WriteLine("{0} kanji read", kanjiList.Count);
 
             using (ODB odb = ODBFactory.Open(databaseName))  {
-                kanjiList.ForEach(k => odb.Store(k));
+
+                foreach (var kanji in kanjiList) {
+                    kanji.Image = GetImage(kanji.Literal);
+                    odb.Store(kanji);
+                }
 
                 Console.WriteLine("Objects saved.");
                 
@@ -132,6 +142,43 @@ namespace KanjiDatabase
         private static void TestDatabase2()
         {
             var list = DataGateway.Instance.GetAllKanji();
+        }
+
+        private static MemoryStream GetImage(string kanji)
+        {
+            Bitmap bmpImage = new Bitmap(1, 1);
+
+            int width = 173;
+            int height = 173;
+            // Create the Font object for the image text drawing.   
+            Font font = new Font("Calibri", 67, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+
+            // Create a graphics object to measure the text's width and height.  
+            Graphics graphics = Graphics.FromImage(bmpImage);
+
+            // This is where the bitmap size is determined. 
+            // width = (int)objGraphics.MeasureString(kanji, font).Width;
+            //height = (int)objGraphics.MeasureString(kanji, font).Height;
+            // Create the bmpImage again with the correct size for the text and font. 
+            bmpImage = new Bitmap(bmpImage, new Size(width, height));
+
+            // Add the colors to the new bitmap.  
+            graphics = Graphics.FromImage(bmpImage);
+
+            // Set Background color  
+            graphics.Clear(Color.FromArgb(70, 70, 70));
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
+            graphics.DrawString(kanji, font, new SolidBrush(Color.White), 39, 47);
+            graphics.Flush();
+
+            MemoryStream stream = new MemoryStream();
+
+            bmpImage.Save(stream, ImageFormat.Bmp);
+            stream.Close();
+            return stream;
+
+           // return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bmpImage.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight(width, height));
         }
 
     }
