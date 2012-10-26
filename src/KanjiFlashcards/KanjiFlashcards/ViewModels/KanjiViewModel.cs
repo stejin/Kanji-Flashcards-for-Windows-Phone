@@ -205,30 +205,30 @@ namespace KanjiFlashcards.ViewModels
 
         private void MoveForwardAction(object p)
         {
+            Index += 1;
             if (OnMoveForward != null)
                 OnMoveForward(p, new EventArgs());
-            Index += 1;
         }
 
         private void MovePreviousAction(object p)
         {
+            Index -= 1;
             if (OnMoveBackward != null)
                 OnMoveBackward(p, new EventArgs());
-            Index -= 1;
         }
 
         private void MoveLastAction(object p)
         {
+            Index = GetMaxIndex();
             if (OnMoveForward != null)
                 OnMoveForward(p, new EventArgs());
-            Index = GetMaxIndex();
         }
 
         private void MoveFirstAction(object p)
         {
+            Index = 0;
             if (OnMoveBackward != null)
                 OnMoveBackward(p, new EventArgs());
-            Index = 0;
         }
 
         public ICommand AddItemToReviewListCommand

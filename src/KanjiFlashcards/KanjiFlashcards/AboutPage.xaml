@@ -57,8 +57,8 @@
                         <TextBlock Grid.Column="1" Text="Like this app? We accept donations in Bitcoin." VerticalAlignment="Top" TextWrapping="Wrap" />
                         <Image Grid.Column="0" Source="/Images/Misc/logo_small.png" Width="57" Height="60" />
                     </Grid>
-                    <Image Source="/Images/Misc/BitcoinQR.png" Width="256" Height="256"  HorizontalAlignment="Left" Margin="0,10" />
-                    <TextBlock Text="1B8vVbRaSdo6E8wHws3hRwopWdGyxj8mGi" />
+                    <Image Source="/Images/Misc/BitcoinQR.png" Width="256" Height="256"  HorizontalAlignment="Left" Margin="0,10" Tap="Image_Tap" />
+                    <TextBlock x:Name="BitcoinWallet" Text="1B8vVbRaSdo6E8wHws3hRwopWdGyxj8mGi" />
                 </StackPanel>
             </ScrollViewer>
         </Grid>

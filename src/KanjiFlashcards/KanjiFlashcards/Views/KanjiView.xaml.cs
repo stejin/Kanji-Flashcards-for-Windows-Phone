@@ -29,28 +29,29 @@ namespace KanjiFlashcards.Views
             ExitToRight.Completed += new EventHandler(ExitToRight_Completed);
 
             vm.OnMoveForward += MoveForward;
+            vm.OnMoveForward += UpdateBindings;
             vm.OnMoveBackward += MoveBackward;
+            vm.OnMoveBackward += UpdateBindings;
             vm.OnAddItemToReviewList += AddToReviewListButton_Click;
             vm.OnRemoveItemFromReviewList += RemoveFromReviewListButton_Click;
+            vm.OnRemoveItemFromReviewList += UpdateBindings;
             vm.OnReportBrokenKanji += ApplicationBarMenuItem_Click;
         }
 
         private void ExitToLeft_Completed(object sender, EventArgs args)
         {
             vm.NotifyPropertyChanges();
-            UpdateBindings();
             EnterFromRight.Begin();
         }
 
         private void ExitToRight_Completed(object sender, EventArgs args)
         {
             vm.NotifyPropertyChanges();
-            UpdateBindings();
             EnterFromLeft.Begin();
         }
 
         // Work around bugs in BindableApplicationBar
-        private void UpdateBindings()
+        private void UpdateBindings(object sender, EventArgs e)
         {
             (ApplicationBar.Buttons[0] as IApplicationBarIconButton).IsEnabled = vm.HasPrevious;
             (ApplicationBar.Buttons[1] as IApplicationBarIconButton).IsEnabled = vm.HasPrevious;
@@ -89,12 +90,16 @@ namespace KanjiFlashcards.Views
         private void MoveForward(object sender, EventArgs e)
         {
             ((PhoneApplicationFrame)App.Current.RootVisual).Style = (Style)App.Current.Resources["forwardTransition"];
+            if (ExitToLeft.GetCurrentState() == ClockState.Active)
+                vm.NotifyPropertyChanges();
             ExitToLeft.Begin();
         }
 
         private void MoveBackward(object sender, EventArgs e)
         {
             ((PhoneApplicationFrame)App.Current.RootVisual).Style = (Style)App.Current.Resources["backwardTransition"];
+            if (ExitToRight.GetCurrentState() == ClockState.Active)
+                vm.NotifyPropertyChanges();
             ExitToRight.Begin();
         }
 
@@ -121,7 +126,6 @@ namespace KanjiFlashcards.Views
             vm.RemoveItemFromReviewList();
             if (App.CurrentKanji != null) {
                 vm.NotifyPropertyChanges();
-                UpdateBindings();
             } else {
                 this.NavigationService.GoBack();
             }
