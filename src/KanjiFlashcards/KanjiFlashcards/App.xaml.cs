@@ -163,28 +163,22 @@ namespace KanjiFlashcards
             ReviewList.Save();
             AppSettings.Save();
             var settingsStorage = IsolatedStorageSettings.ApplicationSettings;
-            if (CurrentKanji != null) {
-                if (settingsStorage.Contains("LastViewedKanji"))
-                    settingsStorage["LastViewedKanji"] = CurrentKanji.Literal;
-                else
-                    settingsStorage.Add("LastViewedKanji", CurrentKanji.Literal);
-            }
+            if (settingsStorage.Contains("LastViewedKanji"))
+                settingsStorage["LastViewedKanji"] = CurrentKanji == null ? String.Empty : CurrentKanji.Literal;
+            else
+                settingsStorage.Add("LastViewedKanji", CurrentKanji == null ? String.Empty : CurrentKanji.Literal);
             if (settingsStorage.Contains("KanjiMode"))
                 settingsStorage["KanjiMode"] = KanjiMode;
             else
                 settingsStorage.Add("KanjiMode", KanjiMode);
-            if (CurrentReviewList != null) {
-                if (settingsStorage.Contains("ReviewList"))
-                    settingsStorage["ReviewList"] = CurrentReviewList.Name;
-                else
-                    settingsStorage.Add("ReviewList", CurrentReviewList.Name);
-            }
-            if (LookupKanji != null) {
-                if (settingsStorage.Contains("LookupKanji"))
-                    settingsStorage["LookupKanji"] = LookupKanji;
-                else
-                    settingsStorage.Add("LookupKanji", LookupKanji);
-            }
+            if (settingsStorage.Contains("ReviewList"))
+                settingsStorage["ReviewList"] = CurrentReviewList == null ? String.Empty : CurrentReviewList.Name;
+            else
+                settingsStorage.Add("ReviewList", CurrentReviewList == null ? String.Empty : CurrentReviewList.Name);
+            if (settingsStorage.Contains("LookupKanji"))
+                settingsStorage["LookupKanji"] = LookupKanji == null ? new List<string>() : LookupKanji;
+            else
+                settingsStorage.Add("LookupKanji", LookupKanji == null ? new List<string>() : LookupKanji);
             settingsStorage.Save();
         }
 

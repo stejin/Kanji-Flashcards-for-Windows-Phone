@@ -39,7 +39,7 @@ namespace KanjiFlashcards
         {
             var emailComposeTask = new EmailComposeTask {
                 Subject = "Support Kanji Flashcards for Windows Phone",
-                Body = "Please send your donation in Bitcoin to: " + Environment.NewLine + BitcoinWallet.Text
+                Body = "Please send your donation in Bitcoin to: " + Environment.NewLine + Environment.NewLine + BitcoinWallet.Text
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Thank you!"
